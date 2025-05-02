@@ -128,10 +128,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 610008248}
+  - component: {fileID: 610008249}
   - component: {fileID: 610008247}
   - component: {fileID: 610008246}
   - component: {fileID: 610008245}
-  - component: {fileID: 610008249}
   - component: {fileID: 610008250}
   m_Layer: 0
   m_Name: Player
