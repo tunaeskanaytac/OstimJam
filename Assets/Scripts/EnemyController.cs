@@ -345,8 +345,16 @@ public class EnemyController : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, visionRange);
 
         // Get the base direction based on sprite orientation
-        Vector2 baseDirection = spriteRenderer.flipX ? Vector2.left : Vector2.right;
-        
+        Vector2 baseDirection;
+        if (spriteRenderer == null)
+        {
+            baseDirection = Vector2.left;
+        }
+        else
+        {
+            baseDirection = spriteRenderer.flipX ? Vector2.left : Vector2.right;
+        }
+
         // Calculate the vision cone angles
         Vector3 rightDirection = Quaternion.Euler(0, 0, visionAngle / 2) * baseDirection;
         Vector3 leftDirection = Quaternion.Euler(0, 0, -visionAngle / 2) * baseDirection;
