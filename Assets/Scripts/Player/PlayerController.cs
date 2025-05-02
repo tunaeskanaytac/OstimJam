@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float movementSpeed;
     [SerializeField] private float jumpForce;
     [SerializeField] private float coyoteTime = 0.2f;
+    [SerializeField] private GroundCheck groundCheck;
     #endregion
 
     #region State Flags
@@ -71,21 +72,17 @@ public class PlayerController : MonoBehaviour
 
         _movementInputDirection = Input.GetAxisRaw("Horizontal");
         // CHECK ROLL
-        if (Input.GetKeyDown(KeyCode.LeftShift) && _canRoll && !_isRolling && IsGrounded())
+        if (Input.GetKeyDown(KeyCode.LeftShift) && _canRoll && !_isRolling && groundCheck.IsGrounded)
         {
             StartCoroutine(Roll());
         }
-        // CHECK JUMP
-        if (IsGrounded())
-        {
-            _extraJump = 1;
-        }
 
-        if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && coyoteTimeCounter > 0f)
+        if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && groundCheck.IsGrounded)
         {
             Jump();
+            _extraJump = 1;
         }
-        else if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && _extraJump > 0)
+        else if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && _extraJump > 0 && !groundCheck.IsGrounded)
         {
             Jump();
             _extraJump = 0;
@@ -167,7 +164,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleCoyoteTime()
     {
-        if (IsGrounded())
+        if (groundCheck.IsGrounded)
         {
             coyoteTimeCounter = coyoteTime;
         }
@@ -197,19 +194,6 @@ public class PlayerController : MonoBehaviour
     {
         _anim.SetBool("_isRunning", _isRunning);
         _anim.SetBool("isGrounded", IsGrounded());
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Obstacle"))
-        {
-            Die();
-        }
-        else if (collision.CompareTag("Finish"))
-        {
-            int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
-            SceneManager.LoadScene(nextSceneIndex);
-        }
     }
 
     private void OnDrawGizmos()
