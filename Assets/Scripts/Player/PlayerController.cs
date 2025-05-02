@@ -70,16 +70,20 @@ public class PlayerController : MonoBehaviour
         }
 
         _movementInputDirection = Input.GetAxisRaw("Horizontal");
-
+        // CHECK ROLL
         if (Input.GetKeyDown(KeyCode.LeftShift) && _canRoll && !_isRolling && IsGrounded())
         {
             StartCoroutine(Roll());
+        }
+        // CHECK JUMP
+        if (IsGrounded())
+        {
+            _extraJump = 1;
         }
 
         if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && coyoteTimeCounter > 0f)
         {
             Jump();
-            _extraJump = 1;
         }
         else if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && _extraJump > 0)
         {
@@ -154,7 +158,7 @@ public class PlayerController : MonoBehaviour
 
     private bool IsGrounded()
     {
-        float extraHeight = 0.3f;
+        float extraHeight = 0.2f;
         RaycastHit2D raycastHit = Physics2D.BoxCast(
             _collider.bounds.center, new Vector3(_collider.bounds.size.x / 1.1f, _collider.bounds.size.y, _collider.bounds.size.z), 0, Vector2.down, extraHeight, groundLayer);
 
@@ -212,7 +216,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_collider == null) return;
 
-        float extraHeight = 0.3f;
+        float extraHeight = 0.2f;
         Gizmos.color = Color.red;
 
         Vector2 boxCastPos = (Vector2)_collider.bounds.center + Vector2.down * extraHeight / 2;
