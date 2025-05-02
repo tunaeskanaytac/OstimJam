@@ -397,6 +397,26 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
+  - first: {x: 1, y: -3, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: 2, y: -3, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
   - first: {x: 6, y: -3, z: 0}
     second:
       serializedVersion: 2
@@ -581,7 +601,7 @@ Tilemap:
   m_TileAssetArray:
   - m_RefCount: 3
     m_Data: {fileID: 11400000, guid: 031aac29db55d524bb8e5055f5ed4428, type: 2}
-  - m_RefCount: 18
+  - m_RefCount: 20
     m_Data: {fileID: 11400000, guid: cff244407aee66847a826ae1f47b3a49, type: 2}
   - m_RefCount: 3
     m_Data: {fileID: 11400000, guid: bffd1c31778792849a9cdd9389955db8, type: 2}
@@ -600,7 +620,7 @@ Tilemap:
   m_TileSpriteArray:
   - m_RefCount: 3
     m_Data: {fileID: -176324442, guid: 194e736e88ce92a498feeb7b5205fb22, type: 3}
-  - m_RefCount: 18
+  - m_RefCount: 20
     m_Data: {fileID: 48187008, guid: 194e736e88ce92a498feeb7b5205fb22, type: 3}
   - m_RefCount: 3
     m_Data: {fileID: -1312313747, guid: 194e736e88ce92a498feeb7b5205fb22, type: 3}
@@ -617,7 +637,7 @@ Tilemap:
   - m_RefCount: 2
     m_Data: {fileID: 2035336950, guid: 194e736e88ce92a498feeb7b5205fb22, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 36
+  - m_RefCount: 38
     m_Data:
       e00: 1
       e01: 0
@@ -636,7 +656,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 36
+  - m_RefCount: 38
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -777,6 +797,14 @@ CompositeCollider2D:
         Y: 0
       - X: 60000000
         Y: -30000000
+      - X: 30000000
+        Y: -30000000
+      - X: 30000000
+        Y: -20000000
+      - X: 10000000
+        Y: -20000000
+      - X: 10000000
+        Y: -30000000
       - X: -90000000
         Y: -30000000
       - X: -90000000
@@ -793,6 +821,10 @@ CompositeCollider2D:
       - {x: 8.99997, y: 0}
       - {x: 6, y: -0.000029300001}
       - {x: 5.9999704, y: -3}
+      - {x: 3, y: -2.9999707}
+      - {x: 2.999971, y: -2}
+      - {x: 1, y: -2.0000293}
+      - {x: 0.9999706, y: -3}
       - {x: -9, y: -3.0000293}
       - {x: -8.99997, y: -4}
   m_VertexDistance: 0.0005
@@ -1195,9 +1227,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   movementSpeed: 5
-  jumpForce: 10
+  jumpForce: 11
   coyoteTime: 0.2
   groundCheck: {fileID: 1009162443}
+  isOnLedgeFace: {fileID: 1881671623}
+  isOnLedgeLegs: {fileID: 2137625013}
+  offset1: {x: 0.5, y: 1.23}
+  offset2: {x: 0.57, y: 1.33}
 --- !u!4 &1361254433
 Transform:
   m_ObjectHideFlags: 0
@@ -1272,6 +1308,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1881671621}
   - component: {fileID: 1881671622}
+  - component: {fileID: 1881671623}
   m_Layer: 0
   m_Name: ledgeDetectionFace
   m_TagString: Untagged
@@ -1330,6 +1367,18 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.38175368}
   m_Radius: 0.11824632
+--- !u!114 &1881671623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881671620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 410e159b128654c6789d7b42418b2135, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2106952274
 GameObject:
   m_ObjectHideFlags: 0
@@ -1385,6 +1434,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2137625011}
   - component: {fileID: 2137625012}
+  - component: {fileID: 2137625013}
   m_Layer: 0
   m_Name: ledgeDetectionLegs
   m_TagString: Untagged
@@ -1443,6 +1493,18 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.11910716}
   m_Radius: 0.1182463
+--- !u!114 &2137625013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2137625010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 410e159b128654c6789d7b42418b2135, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

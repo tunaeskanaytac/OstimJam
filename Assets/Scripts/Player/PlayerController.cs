@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private bool _canMove = true;
     private bool _isFacingRight = true;
     private bool _isRunning;
+    private bool _canGetHurt;
     #endregion
 
     #region Movement Variables
@@ -43,6 +44,15 @@ public class PlayerController : MonoBehaviour
     private int _extraJump = 1;
     #endregion
 
+    [Header("Ledge Info")]
+    [SerializeField] private Vector2 offset1;
+    [SerializeField] private Vector2 offset2;
+
+    private Vector2 _climbBegunPosition;
+    private Vector2 _climbOverPosition;
+    private bool _canGrabLedge = true;
+    private bool _canClimb;
+
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -54,6 +64,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        CheckForLedge();
         CheckInput();
         CheckMovementDirection();
         UpdateAnimations();
@@ -139,6 +150,7 @@ public class PlayerController : MonoBehaviour
         _anim.SetTrigger("Roll");
         _canRoll = false;
         _isRolling = true;
+        _canGetHurt = true;
 
         Vector2 originalSize = _collider.size;
         Vector2 originalOffset = _collider.offset;
@@ -151,6 +163,7 @@ public class PlayerController : MonoBehaviour
         _collider.size = originalSize;
         _collider.offset = originalOffset;
 
+        _canGetHurt = false;
         _isRolling = false;
         _canRoll = true;
     }
@@ -196,6 +209,51 @@ public class PlayerController : MonoBehaviour
     {
         _anim.SetBool("_isRunning", _isRunning);
         _anim.SetBool("isGrounded", IsGrounded());
+    }
+
+    private void CheckForLedge()
+    {
+        if (isOnLedgeFace.IsOnLedge && !isOnLedgeLegs.IsOnLedge && _canGrabLedge)
+        {
+            _canGrabLedge = false;
+
+            // Determine climb positions based on current facing direction
+            Vector2 ledgePosition = isOnLedgeFace.transform.position;
+
+            if (_isFacingRight)
+            {
+                _climbBegunPosition = ledgePosition + offset1;
+                _climbOverPosition = ledgePosition + offset2;
+            }
+            else
+            {
+                Vector2 flippedOffset1 = new Vector2(-offset1.x, offset1.y);
+                Vector2 flippedOffset2 = new Vector2(-offset2.x, offset2.y);
+                _climbBegunPosition = ledgePosition + flippedOffset1;
+                _climbOverPosition = ledgePosition + flippedOffset2;
+            }
+
+            StartCoroutine(ClimbLedge());
+        }
+    }
+
+    private IEnumerator ClimbLedge()
+    {
+        _canMove = false;
+        _rb.linearVelocity = Vector2.zero;
+        _anim.SetTrigger("ClimbLedge");
+
+        // Snap player to the climb begin position
+        transform.position = _climbBegunPosition;
+
+        yield return new WaitForSeconds(0.5f); // Adjust to match your climb animation
+
+        transform.position = _climbOverPosition;
+
+        yield return new WaitForSeconds(0.2f); // Wait a bit after animation
+
+        _canMove = true;
+        _canGrabLedge = true;
     }
 
     private void OnDrawGizmos()

@@ -2,15 +2,21 @@ using UnityEngine;
 
 public class LedgeCheck : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public bool IsOnLedge { get; private set; }
+
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        
+        if (other.CompareTag("Ground"))
+        {
+            IsOnLedge = true;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerExit2D(Collider2D other)
     {
-        
+        if (other.CompareTag("Ground"))
+        {
+            IsOnLedge = false;
+        }
     }
 }
