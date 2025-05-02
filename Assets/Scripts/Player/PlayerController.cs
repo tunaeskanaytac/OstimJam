@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce;
     [SerializeField] private float coyoteTime = 0.2f;
     [SerializeField] private GroundCheck groundCheck;
+    [SerializeField] private LedgeCheck isOnLedgeFace;
+    [SerializeField] private LedgeCheck isOnLedgeLegs;
     #endregion
 
     #region State Flags
