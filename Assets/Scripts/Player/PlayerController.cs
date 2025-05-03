@@ -250,7 +250,7 @@ public class PlayerController : MonoBehaviour
 
     public void Die()
     {
-        if ((!_isDying && !_isRolling && !isParrying))
+        if ((!_isDying && (!_isRolling || timer.elapsedTime <= 0) && !isParrying))
         {
             _isDying = true;
             _anim.SetTrigger("Death");
