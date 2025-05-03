@@ -128,17 +128,17 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !_isDying)
         {
             PerformAttack();
         }
-        else if (Input.GetKeyDown(KeyCode.Mouse1) && _canParry)
+        else if (Input.GetKeyDown(KeyCode.Mouse1) && _canParry && !_isDying)
         {
             StartCoroutine(Parry());
         }
         _movementInputDirection = Input.GetAxisRaw("Horizontal");
         // CHECK ROLL
-        if (Input.GetKeyDown(KeyCode.LeftShift) && _canRoll && !_isRolling && groundCheck.IsGrounded)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && _canRoll && !_isRolling && groundCheck.IsGrounded && !_isClimbingLedge && !_isDying)
         {
             StartCoroutine(Roll());
         }
