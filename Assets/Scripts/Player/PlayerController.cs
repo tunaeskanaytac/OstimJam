@@ -252,7 +252,8 @@ public class PlayerController : MonoBehaviour
     private void UpdateAnimations()
     {
         _anim.SetBool("_isRunning", _isRunning);
-        _anim.SetBool("isGrounded", groundCheck.IsGrounded);;
+        _anim.SetBool("isGrounded", groundCheck.IsGrounded);
+        _anim.SetFloat("YVelocity", _rb.linearVelocityY);
     }
 
     private void CheckForLedge()
