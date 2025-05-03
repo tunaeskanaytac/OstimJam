@@ -254,7 +254,7 @@ public class PlayerController : MonoBehaviour
         {
             _isDying = true;
             _anim.SetTrigger("Death");
-            StartCoroutine(Respawn(2.53f));
+            StartCoroutine(Respawn(3f));
         }
         else
         {
