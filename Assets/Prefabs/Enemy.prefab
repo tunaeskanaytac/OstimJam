@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 337631465717841204}
   m_Layer: 0
   m_Name: sword
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 7521245383464584282}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.84, y: 1.31, z: 0}
+  m_LocalPosition: {x: 0.706, y: 0.114, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -67,7 +67,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.12865067, y: -0.08844721}
+  m_Offset: {x: -0.12865067, y: 0.1456387}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -77,7 +77,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.74269867, y: 1.1768944}
+  m_Size: {x: 0.74269867, y: 0.30537462}
   m_EdgeRadius: 0
 --- !u!114 &337631465717841204
 MonoBehaviour:
@@ -92,6 +92,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageAmount: 10
+  isPlayerHitbox: 0
+  onParried:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8959868938320873118
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,7 +111,7 @@ GameObject:
   - component: {fileID: 5847522117934723146}
   m_Layer: 8
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -172,8 +176,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4876159422814114916, guid: 2625e49f84e48024dbe4fb62fdbc4416, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 315178134873488942, guid: 38f203258da32b84ba4b537016ae86b0, type: 3}
+  m_Color: {r: 0.532, g: 0.32873586, b: 0.32873586, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -195,6 +199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6ad525da18e7274687c833921afaebb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parryStunDuration: 1.5
   attackRange: 1.5
   attackCooldown: 1
   canAttack: 1
@@ -219,7 +224,7 @@ MonoBehaviour:
     m_Bits: 128
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 65
 --- !u!50 &487887785297145179
 Rigidbody2D:
   serializedVersion: 5
@@ -281,15 +286,15 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 1.12}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 1.28, y: 2.24}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.5833334, y: 1.4166666}
     newSize: {x: 1.28, y: 2.24}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.28, y: 2.24}
+  m_Size: {x: 1.5833334, y: 1.4166666}
   m_EdgeRadius: 0

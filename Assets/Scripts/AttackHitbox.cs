@@ -48,7 +48,7 @@ public class AttackHitbox : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerController player = other.GetComponent<PlayerController>();
-            if (player != null)
+            if (player != null && player._canGetHurt)
             {
                 player.Die();
             }

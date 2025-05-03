@@ -127,13 +127,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7091024756071864071, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
+      propertyPath: minDistanceToPlayer
+      value: 1.99
+      objectReference: {fileID: 0}
+    - target: {fileID: -7091024756071864071, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
+      propertyPath: behindAwarenessRange
+      value: 3.18
+      objectReference: {fileID: 0}
     - target: {fileID: 6164502968077130032, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.79
+      value: -7.32
       objectReference: {fileID: 0}
     - target: {fileID: 6164502968077130032, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.82
+      value: -1.84
       objectReference: {fileID: 0}
     - target: {fileID: 6164502968077130032, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -167,16 +175,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7521245383464584282, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
-      propertyPath: m_TagString
-      value: Enemy
-      objectReference: {fileID: 0}
     - target: {fileID: 8959868938320873118, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
       propertyPath: m_Name
-      value: Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 8959868938320873118, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
-      propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
