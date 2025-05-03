@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 _climbBegunPosition;
     private Vector2 _climbOverPosition;
     private bool _canGrabLedge = true;
-    private bool _canClimb;
+    private bool _canClimb = true;
 
     private void Start()
     {
@@ -201,7 +201,7 @@ public class PlayerController : MonoBehaviour
         transform.localScale = new Vector3(0, 0, 0);
         yield return new WaitForSeconds(duration);
         transform.position = _startPos;
-        transform.localScale = new Vector3(0.6f, 0.6f, 1);
+        transform.localScale = new Vector3(1f, 1f, 1f);
         _rb.simulated = true;
     }
 
@@ -213,7 +213,7 @@ public class PlayerController : MonoBehaviour
 
     private void CheckForLedge()
     {
-        if (isOnLedgeFace.IsOnLedge && !isOnLedgeLegs.IsOnLedge && _canGrabLedge)
+        if (!isOnLedgeFace.IsOnLedge && isOnLedgeLegs.IsOnLedge && _canGrabLedge)
         {
             _canGrabLedge = false;
 
@@ -232,7 +232,9 @@ public class PlayerController : MonoBehaviour
                 _climbBegunPosition = ledgePosition + flippedOffset1;
                 _climbOverPosition = ledgePosition + flippedOffset2;
             }
-
+            _rb.linearVelocity = new Vector2(0, 0);
+            _rb.simulated = false;
+            transform.localScale = new Vector3(0, 0, 0);
             StartCoroutine(ClimbLedge());
         }
     }
@@ -251,7 +253,8 @@ public class PlayerController : MonoBehaviour
         transform.position = _climbOverPosition;
 
         yield return new WaitForSeconds(0.2f); // Wait a bit after animation
-
+        transform.localScale = new Vector3(1f, 1f, 1f);
+        _rb.simulated = true;
         _canMove = true;
         _canGrabLedge = true;
     }
