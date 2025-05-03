@@ -282,15 +282,14 @@ public class EnemyController : MonoBehaviour
         float distanceToPlayer = directionToPlayer.magnitude;
 
         if (distanceToPlayer > visionRange)
+        {
+            Debug.LogWarning("Player is too far away to see!");
             return false;
+        }
 
-        // Get the forward direction based on sprite orientation
-        Vector2 forwardDirection = spriteRenderer.flipX ? Vector2.left : Vector2.right;
-        float angle = Vector2.Angle(forwardDirection, directionToPlayer);
+        // Remove the forward direction check since we want to detect players regardless of which way they're facing
+        // The vision angle check is not needed if we want the enemy to see players in front of them
         
-        if (angle > visionAngle / 2)
-            return false;
-
         RaycastHit2D hit = Physics2D.Raycast(
             transform.position,
             directionToPlayer.normalized,

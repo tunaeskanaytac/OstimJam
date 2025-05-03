@@ -194,7 +194,7 @@ public class PlayerController : MonoBehaviour
         _anim.SetTrigger("Roll");
         _canRoll = false;
         _isRolling = true;
-        _canGetHurt = true;
+        _canGetHurt = false;
 
         Vector2 originalSize = _collider.size;
         Vector2 originalOffset = _collider.offset;
@@ -207,7 +207,7 @@ public class PlayerController : MonoBehaviour
         _collider.size = originalSize;
         _collider.offset = originalOffset;
 
-        _canGetHurt = false;
+        _canGetHurt = true;
         _isRolling = false;
         _canRoll = true;
     }
