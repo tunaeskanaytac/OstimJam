@@ -885,7 +885,7 @@ Transform:
   m_GameObject: {fileID: 1009162441}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.591, z: 0}
+  m_LocalPosition: {x: -0.005, y: -0.591, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1225,15 +1225,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   movementSpeed: 5
   jumpForce: 11
   coyoteTime: 0.2
   groundCheck: {fileID: 1009162443}
   isOnLedgeFace: {fileID: 1881671623}
   isOnLedgeLegs: {fileID: 2137625013}
-  offset1: {x: 0.5, y: 1.23}
-  offset2: {x: 0.57, y: 1.33}
+  offset1: {x: -0.3, y: -0.5}
+  offset2: {x: 0.5, y: 1}
 --- !u!4 &1361254433
 Transform:
   m_ObjectHideFlags: 0
@@ -1243,7 +1243,7 @@ Transform:
   m_GameObject: {fileID: 1361254427}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.6066175, y: -0.52207214, z: 0}
+  m_LocalPosition: {x: 4.91, y: -2.41, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1325,7 +1325,7 @@ Transform:
   m_GameObject: {fileID: 1881671620}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.495, y: -0.03, z: 0}
+  m_LocalPosition: {x: 0.487, y: 0.002, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1361,7 +1361,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -1451,7 +1451,7 @@ Transform:
   m_GameObject: {fileID: 2137625010}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.495, y: -0.244, z: 0}
+  m_LocalPosition: {x: 0.487, y: -0.464, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1487,7 +1487,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
