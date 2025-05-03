@@ -474,4 +474,10 @@ public class EnemyController : MonoBehaviour
         }
 
     }
+
+    public void Die()
+    {
+        // Ölüm animasyonu, yok etme vs.
+        Destroy(gameObject);
+    }
 }
