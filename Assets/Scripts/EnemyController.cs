@@ -7,12 +7,17 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float attackRange = 1.5f;
     [SerializeField] private float attackCooldown = 1f;
     [SerializeField] private bool canAttack = true;
+    [SerializeField] private GameObject attackHitbox;
+    [SerializeField] private float attackDuration = 0.2f; // How long the hitbox stays active
     
     // Event that can be used to trigger attack animations or effects
     public UnityEvent onAttackPerformed;
 
     private float attackTimer;
     private bool isWithinAttackRange;
+    private bool isAttacking;
+    private float currentAttackDuration;
+
 
     [Header("Behavior Type")]
     [SerializeField] private EnemyBehavior defaultBehavior = EnemyBehavior.Idle;
@@ -74,6 +79,11 @@ public class EnemyController : MonoBehaviour
         // Initialize the event if it's null
         if (onAttackPerformed == null)
             onAttackPerformed = new UnityEvent();
+        
+        if (attackHitbox != null)
+        {
+            attackHitbox.SetActive(false);
+        }
     }
 
     private void Update()
@@ -85,6 +95,16 @@ public class EnemyController : MonoBehaviour
             if (attackTimer <= 0)
             {
                 canAttack = true;
+            }
+        }
+        
+        // Update attack duration
+        if (isAttacking)
+        {
+            currentAttackDuration -= Time.deltaTime;
+            if (currentAttackDuration <= 0)
+            {
+                EndAttack();
             }
         }
 
@@ -297,32 +317,34 @@ public class EnemyController : MonoBehaviour
     protected virtual void PerformAttack()
     {
         Debug.Log("Attacking!");
-        // This method can be overridden in derived classes or implemented here
-        // Example implementation:
-        /*
-        // Create attack hitbox
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(
-            transform.position, 
-            attackRange, 
-            playerLayer
-        );
-
-        foreach (Collider2D hit in hitColliders)
+        if (attackHitbox == null)
         {
-            // Check if it's the player
-            if (hit.CompareTag("Player"))
-            {
-                // Get player health component
-                PlayerHealth playerHealth = hit.GetComponent<PlayerHealth>();
-                if (playerHealth != null)
-                {
-                    // Deal damage
-                    playerHealth.TakeDamage(attackDamage);
-                }
-            }
+            Debug.LogWarning("Attack hitbox not assigned to " + gameObject.name);
+            return;
         }
-        */
+
+        // Start the attack
+        isAttacking = true;
+        currentAttackDuration = attackDuration;
+        
+        // Enable the hitbox
+        attackHitbox.SetActive(true);
+
+        // Make sure hitbox is on the correct side based on enemy's facing direction
+        Vector3 hitboxLocalPos = attackHitbox.transform.localPosition;
+        hitboxLocalPos.x = Mathf.Abs(hitboxLocalPos.x) * (spriteRenderer.flipX ? -1 : 1);
+        attackHitbox.transform.localPosition = hitboxLocalPos;
     }
+    
+    private void EndAttack()
+    {
+        isAttacking = false;
+        if (attackHitbox != null)
+        {
+            attackHitbox.SetActive(false);
+        }
+    }
+
 
     // Public method to change behavior
     public void SetBehavior(EnemyBehavior newBehavior)
@@ -337,6 +359,19 @@ public class EnemyController : MonoBehaviour
             waitTimer = 0f;
         }
     }
+    
+    // Optional: Method to set damage amount at runtime
+    public void SetAttackDamage(int amount)
+    {
+        if (attackHitbox != null)
+        {
+            AttackHitbox hitboxComponent = attackHitbox.GetComponent<AttackHitbox>();
+            if (hitboxComponent != null)
+            {
+                hitboxComponent.SetDamage(amount);
+            }
+        }
+    }
 
     private void OnDrawGizmosSelected()
     {
@@ -348,7 +383,7 @@ public class EnemyController : MonoBehaviour
         Vector2 baseDirection;
         if (spriteRenderer == null)
         {
-            baseDirection = Vector2.left;
+            baseDirection = Vector2.right;
         }
         else
         {
@@ -390,5 +425,15 @@ public class EnemyController : MonoBehaviour
         // Draw attack range
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
+        
+        // Visualize attack hitbox position if assigned
+        if (attackHitbox != null)
+        {
+            Gizmos.color = Color.magenta;
+            // This will show where the hitbox is/will be
+            Gizmos.DrawWireCube(attackHitbox.transform.position, 
+                attackHitbox.GetComponent<Collider2D>()?.bounds.size ?? Vector3.one);
+        }
+
     }
 }

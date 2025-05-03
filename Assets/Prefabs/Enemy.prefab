@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -7091024756071864071}
   - component: {fileID: 487887785297145179}
   - component: {fileID: 5847522117934723146}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,8 +102,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6ad525da18e7274687c833921afaebb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackRange: 1.5
+  attackCooldown: 1
+  canAttack: 1
+  onAttackPerformed:
+    m_PersistentCalls:
+      m_Calls: []
+  defaultBehavior: 0
   moveSpeed: 5
   minDistanceToPlayer: 2
+  patrolSpeed: 2
+  patrolPoints: []
+  waitTimeAtPoint: 1
+  patrolPointThreshold: 0.1
   visionRange: 7.5
   visionAngle: 145
   behindAwarenessRange: 3
