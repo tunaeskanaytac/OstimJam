@@ -59,10 +59,13 @@ namespace Enemy
 
         private void CheckAttack()
         {
+            Debug.Log("CheckAttack Start");
+            Debug.Log("isPlayerDetected: " + isPlayerDetected);
             if (!isPlayerDetected || !canAttack) return;
-
+            Debug.Log("Performing Attack");
             float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
-            if (distanceToPlayer <= attackRange)
+            Debug.Log("Player is dying: " + playerTransform.GetComponent<PlayerController>()._isDying);
+            if (distanceToPlayer <= attackRange && !(playerTransform.gameObject.GetComponent<PlayerController>()._isDying))
             {
                 StartCoroutine(PerformAttack());
             }
@@ -76,16 +79,18 @@ namespace Enemy
             // Activate attack object
             if (attackObject != null)
             {
-                attackObject.SetActive(true);
                 
                 // Wait for attack duration
                 yield return new WaitForSeconds(attackDuration);
                 
-                // Deactivate attack object
-                attackObject.SetActive(false);
+                attackObject.SetActive(true);
+                
                 
                 // Wait for cooldown
                 yield return new WaitForSeconds(attackCooldown - attackDuration);
+                
+                // Deactivate attack object
+                attackObject.SetActive(false);
             }
             else
             {
@@ -125,7 +130,7 @@ namespace Enemy
         private void CheckPlayerDetection()
         {
             float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
-            isPlayerInRange = distanceToPlayer <= detectionRange && distanceToPlayer > stopDistance;
+            isPlayerInRange = distanceToPlayer <= detectionRange; // && distanceToPlayer > stopDistance;
             
             if (isPlayerInRange)
             {
