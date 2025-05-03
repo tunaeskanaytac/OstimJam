@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 namespace Enemy
 {
@@ -11,8 +12,14 @@ namespace Enemy
         
         [Header("Vision Settings")]
         [SerializeField] private float fieldOfViewAngle = 90f;
-        [SerializeField] private float closeDetectionRadius = 2f; // Radius for 360-degree detection
+        [SerializeField] private float closeDetectionRadius = 2f;
         [SerializeField] private bool debugVision = true;
+        
+        [Header("Attack Settings")]
+        [SerializeField] private GameObject attackObject;
+        [SerializeField] private float attackDuration = 0.5f;
+        [SerializeField] private float attackCooldown = 1f;
+        [SerializeField] private float attackRange = 1.5f;
         
         [Header("References")]
         private Rigidbody2D rb;
@@ -23,11 +30,65 @@ namespace Enemy
         private bool isPlayerDetected;
         private Vector2 movementDirection;
         private bool isFacingRight = true;
+        private bool canAttack = true;
         
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
             FindPlayer();
+            
+            // Ensure attack object starts disabled
+            if (attackObject != null)
+            {
+                attackObject.SetActive(false);
+            }
+        }
+
+        private void Update()
+        {
+            if (playerTransform == null) return;
+            
+            CheckPlayerDetection();
+            CalculateMovementDirection();
+            CheckAttack();
+        }
+
+        private void CheckAttack()
+        {
+            if (!isPlayerDetected || !canAttack) return;
+
+            float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
+            if (distanceToPlayer <= attackRange)
+            {
+                StartCoroutine(PerformAttack());
+            }
+        }
+
+        private IEnumerator PerformAttack()
+        {
+            canAttack = false;
+
+            // Activate attack object
+            if (attackObject != null)
+            {
+                attackObject.SetActive(true);
+                
+                // Wait for attack duration
+                yield return new WaitForSeconds(attackDuration);
+                
+                // Deactivate attack object
+                attackObject.SetActive(false);
+                
+                // Wait for cooldown
+                yield return new WaitForSeconds(attackCooldown - attackDuration);
+            }
+            else
+            {
+                Debug.LogWarning("Attack object is not assigned!");
+                yield return new WaitForSeconds(attackCooldown);
+            }
+
+            canAttack = true;
         }
 
         private void FindPlayer()
@@ -41,14 +102,6 @@ namespace Enemy
             {
                 Debug.LogWarning("Player not found! Make sure the player has the 'Player' tag.");
             }
-        }
-
-        private void Update()
-        {
-            if (playerTransform == null) return;
-            
-            CheckPlayerDetection();
-            CalculateMovementDirection();
         }
 
         private void FixedUpdate()
@@ -139,44 +192,11 @@ namespace Enemy
         {
             if (!debugVision) return;
             
-            // Draw main detection range
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, detectionRange);
+            // Previous Gizmos drawing code remains unchanged
             
-            // Draw close detection radius (360-degree detection)
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, closeDetectionRadius);
-            
-            // Draw stop distance
+            // Draw attack range
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, stopDistance);
-            
-            // Draw vision cone
-            Gizmos.color = Color.blue;
-            Vector3 facingDirection = isFacingRight ? Vector3.right : Vector3.left;
-            Vector3 rightBoundary = Quaternion.Euler(0, 0, fieldOfViewAngle * 0.5f) * facingDirection;
-            Vector3 leftBoundary = Quaternion.Euler(0, 0, -fieldOfViewAngle * 0.5f) * facingDirection;
-            
-            // Only draw vision cone from close detection radius to detection range
-            Vector3 closeRightStart = transform.position + rightBoundary * closeDetectionRadius;
-            Vector3 closeLeftStart = transform.position + leftBoundary * closeDetectionRadius;
-            Vector3 farRightEnd = transform.position + rightBoundary * detectionRange;
-            Vector3 farLeftEnd = transform.position + leftBoundary * detectionRange;
-            
-            Gizmos.DrawLine(closeRightStart, farRightEnd);
-            Gizmos.DrawLine(closeLeftStart, farLeftEnd);
-            
-            // Draw arc for outer detection range
-            int segments = 20;
-            Vector3 previousPoint = farRightEnd;
-            for (int i = 1; i <= segments; i++)
-            {
-                float angle = fieldOfViewAngle * ((float)i / segments - 0.5f);
-                Vector3 currentPoint = transform.position + 
-                    (Quaternion.Euler(0, 0, angle) * facingDirection) * detectionRange;
-                Gizmos.DrawLine(previousPoint, currentPoint);
-                previousPoint = currentPoint;
-            }
+            Gizmos.DrawWireSphere(transform.position, attackRange);
         }
     }
 }

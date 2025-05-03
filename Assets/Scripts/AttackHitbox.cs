@@ -48,7 +48,7 @@ public class AttackHitbox : MonoBehaviour
             PlayerController player = other.GetComponent<PlayerController>();
             if (player != null && player._canGetHurt && !player.isParrying)
             {
-                player.Die();
+                //player.Die();
             }
             else if (player != null && player._canGetHurt && player.isParrying)
             {
