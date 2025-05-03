@@ -143,12 +143,12 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(Roll());
         }
 
-        if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && groundCheck.IsGrounded && !_isClimbingLedge)
+        if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && groundCheck.IsGrounded && !_isClimbingLedge && !_isDying)
         {
             Jump();
             _extraJump = 1;
         }
-        else if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && _extraJump > 0 && !groundCheck.IsGrounded && !_isClimbingLedge)
+        else if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && _extraJump > 0 && !groundCheck.IsGrounded && !_isClimbingLedge && !_isDying)
         {
             Jump();
             _extraJump = 0;
