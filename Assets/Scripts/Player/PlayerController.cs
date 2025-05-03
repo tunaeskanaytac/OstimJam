@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
     private bool _isRunning;
     public bool _canGetHurt = true;
     private bool _isDying = false;
+    private bool _isClimbingLedge;
     #endregion
 
     #region Movement Variables
@@ -142,12 +143,12 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(Roll());
         }
 
-        if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && groundCheck.IsGrounded)
+        if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && groundCheck.IsGrounded && !_isClimbingLedge)
         {
             Jump();
             _extraJump = 1;
         }
-        else if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && _extraJump > 0 && !groundCheck.IsGrounded)
+        else if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && _extraJump > 0 && !groundCheck.IsGrounded && !_isClimbingLedge)
         {
             Jump();
             _extraJump = 0;
@@ -297,9 +298,7 @@ public class PlayerController : MonoBehaviour
                 _climbBegunPosition = ledgePosition + flippedOffset1;
                 _climbOverPosition = ledgePosition + flippedOffset2;
             }
-            _rb.linearVelocity = new Vector2(0, 0);
-            _rb.simulated = false;
-            transform.localScale = new Vector3(0, 0, 0);
+            
             StartCoroutine(ClimbLedge());
         }
     }
@@ -308,19 +307,22 @@ public class PlayerController : MonoBehaviour
     {
         _canMove = false;
         _rb.linearVelocity = Vector2.zero;
-        _anim.SetTrigger("ClimbLedge");
+        _rb.bodyType = RigidbodyType2D.Kinematic;
 
+        _anim.SetTrigger("ClimbLedge");
         // Snap player to the climb begin position
         transform.position = _climbBegunPosition;
 
-        yield return new WaitForSeconds(0.5f); // Adjust to match your climb animation
-
+        _isClimbingLedge = true;
+        yield return new WaitForSeconds(0.7f); // Adjust to match your climb animation
+        Debug.Log("LEDGE CLIMB: Finished Ledge Climbing anim.");
         transform.position = _climbOverPosition;
 
         yield return new WaitForSeconds(0.2f); // Wait a bit after animation
-        transform.localScale = new Vector3(1f, 1f, 1f);
-        _rb.simulated = true;
+        _isClimbingLedge = false;
+        Debug.Log("LEDGE CLIMB: Finished Delay.");
         _canMove = true;
+        _rb.bodyType = RigidbodyType2D.Dynamic;
         _canGrabLedge = true;
     }
 
