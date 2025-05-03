@@ -8,7 +8,9 @@ public class AttackHitbox : MonoBehaviour
 {
     [SerializeField] private GameObject sliceEffect;
     public bool isPlayerHitbox = false;
-    
+
+    private EnemyController lastEnemy;
+
     public UnityEvent onParried;
     private bool isParried = false;
     public Timer timer;
@@ -37,14 +39,17 @@ public class AttackHitbox : MonoBehaviour
 
         if (other.CompareTag("Enemy"))
         {
-            EnemyController Enemy = other.GetComponent<EnemyController>();
-            if (Enemy != null)
+            lastEnemy = other.GetComponent<EnemyController>();
+            if (lastEnemy != null)
             {
-                Enemy.Die();
-                timer.elapsedTime += 3;
+                if (!isPlayerHitbox)
+                {
+                    lastEnemy.Die();
+                    timer.elapsedTime += 3;
+                }
             }
         }
-        // Normal attack logic
+
         if (other.CompareTag("Player"))
         {
             PlayerController player = other.GetComponent<PlayerController>();
@@ -55,6 +60,12 @@ public class AttackHitbox : MonoBehaviour
             else if (player != null && player._canGetHurt && player.isParrying)
             {
                 onParried?.Invoke();
+
+                if (lastEnemy != null)
+                {
+                    lastEnemy.OnParried(player.transform.position, 10f); // Knockback force = 10 (tweakable)
+                    isParried = true;
+                }
             }
         }
     }

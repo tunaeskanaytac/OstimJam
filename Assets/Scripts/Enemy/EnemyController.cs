@@ -194,6 +194,13 @@ namespace Enemy
             }
         }
 
+        public void OnParried(Vector2 parrySourcePosition, float knockbackForce)
+        {
+            Vector2 knockbackDirection = (transform.position - (Vector3)parrySourcePosition).normalized;
+            rb.linearVelocity = Vector2.zero; // Stop current motion
+            rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+        }
+
         public void Die()
         {
             Destroy(gameObject);
