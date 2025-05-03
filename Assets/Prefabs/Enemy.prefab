@@ -91,7 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a0ee921443ce9b42a761617d91123f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 10
+  sliceEffect: {fileID: 0}
   isPlayerHitbox: 0
   onParried:
     m_PersistentCalls:
@@ -106,9 +106,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6164502968077130032}
   - component: {fileID: 7436751638661898278}
-  - component: {fileID: -7091024756071864071}
   - component: {fileID: 487887785297145179}
   - component: {fileID: 5847522117934723146}
+  - component: {fileID: 4227157909858984610}
   m_Layer: 8
   m_Name: Enemy
   m_TagString: Enemy
@@ -187,44 +187,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-7091024756071864071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8959868938320873118}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6ad525da18e7274687c833921afaebb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parryStunDuration: 1.5
-  attackRange: 1.5
-  attackCooldown: 1
-  canAttack: 1
-  attackHitbox: {fileID: 7521245383464584282}
-  attackDuration: 0.2
-  onAttackPerformed:
-    m_PersistentCalls:
-      m_Calls: []
-  defaultBehavior: 0
-  moveSpeed: 5
-  minDistanceToPlayer: 2
-  patrolSpeed: 2
-  patrolPoints: []
-  waitTimeAtPoint: 1
-  patrolPointThreshold: 0.1
-  visionRange: 7.5
-  visionAngle: 145
-  behindAwarenessRange: 3
-  turnAroundDelay: 0.5
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  obstacleLayer:
-    serializedVersion: 2
-    m_Bits: 65
 --- !u!50 &487887785297145179
 Rigidbody2D:
   serializedVersion: 5
@@ -298,3 +260,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.5833334, y: 1.4166666}
   m_EdgeRadius: 0
+--- !u!114 &4227157909858984610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8959868938320873118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11ad2bfbf72843e087fe4241ab56746e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 3
+  detectionRange: 5
+  stopDistance: 1

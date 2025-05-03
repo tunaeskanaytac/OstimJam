@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Enemy;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -35,10 +36,10 @@ public class AttackHitbox : MonoBehaviour
 
         if (other.CompareTag("Enemy"))
         {
-            EnemyController enemy = other.GetComponent<EnemyController>();
-            if (enemy != null)
+            EnemyController Enemy = other.GetComponent<EnemyController>();
+            if (Enemy != null)
             {
-                enemy.Die();
+                Enemy.Die();
             }
         }
         // Normal attack logic

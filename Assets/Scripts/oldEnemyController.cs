@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events; // For the attack event
 
-public class EnemyController : MonoBehaviour
+public class oldEnemyController : MonoBehaviour
 {
     // Add these fields to the existing ones
     [Header("Parry Settings")]
