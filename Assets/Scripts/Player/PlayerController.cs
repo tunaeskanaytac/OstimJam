@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private BoxCollider2D _collider;
     private Animator _anim;
     private Vector2 _startPos;
+    public Timer timer;
     #endregion
 
     #region Serialized Fields
@@ -107,6 +108,11 @@ public class PlayerController : MonoBehaviour
             {
                 EndAttack();
             }
+        }
+
+        if (timer.elapsedTime <= 0)
+        {
+            Die();
         }
 
         CheckForLedge();
@@ -244,7 +250,7 @@ public class PlayerController : MonoBehaviour
 
     public void Die()
     {
-        if (!_isDying && !_isRolling && !isParrying)
+        if ((!_isDying && !_isRolling && !isParrying))
         {
             _isDying = true;
             _anim.SetTrigger("Death");
@@ -268,6 +274,7 @@ public class PlayerController : MonoBehaviour
         //transform.localScale = new Vector3(1f, 1f, 1f);
         //_rb.simulated = true;
         _canMove = true;
+        timer.elapsedTime = 15f;
     }
 
     private void UpdateAnimations()

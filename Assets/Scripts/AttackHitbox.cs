@@ -11,6 +11,7 @@ public class AttackHitbox : MonoBehaviour
     
     public UnityEvent onParried;
     private bool isParried = false;
+    public Timer timer;
 
     private void Start()
     {
@@ -40,6 +41,7 @@ public class AttackHitbox : MonoBehaviour
             if (Enemy != null)
             {
                 Enemy.Die();
+                timer.elapsedTime += 3;
             }
         }
         // Normal attack logic
