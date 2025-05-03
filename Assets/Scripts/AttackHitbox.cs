@@ -15,6 +15,18 @@ public class AttackHitbox : MonoBehaviour
             onParried = new UnityEvent();
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            EnemyController enemy = collision.GetComponent<EnemyController>();
+            if (enemy != null)
+            {
+                enemy.Die();
+            }
+        }
+    }
+
     private void OnTriggerStay2D(Collider2D other)
     {
         if (isParried) return;
