@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
     private bool _isFacingRight = true;
     private bool _isRunning;
     public bool _canGetHurt = true;
-    private bool _isDying = false;
+    public bool _isDying = false;
     private bool _isClimbingLedge;
     #endregion
 
