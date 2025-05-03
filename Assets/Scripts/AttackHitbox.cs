@@ -1,21 +1,58 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 public class AttackHitbox : MonoBehaviour
 {
     [SerializeField] private int damageAmount = 10;
+    public bool isPlayerHitbox = false;
     
-    private void OnTriggerEnter2D(Collider2D other)
+    public UnityEvent onParried;
+    private bool isParried = false;
+
+    private void Start()
     {
-        Debug.Log("Hitbox triggered");
-        if (other.CompareTag("Player"))
+        if (onParried == null)
+            onParried = new UnityEvent();
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (isParried) return;
+
+        if (isPlayerHitbox)
         {
-            Debug.Log("Sword on player");
-            // PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
-            // if (playerHealth != null)
-            // {
-            //     playerHealth.TakeDamage(damageAmount);
-            // }
+            // Check for parry
+            AttackHitbox otherHitbox = other.GetComponent<AttackHitbox>();
+            if (otherHitbox != null && otherHitbox.isPlayerHitbox != isPlayerHitbox)
+            {
+                // Parry successful!
+                HandleParry();
+                otherHitbox.HandleParry();
+                return;
+            }
         }
+
+        // Normal attack logic
+        if (other.CompareTag(isPlayerHitbox ? "Enemy" : "Player"))
+        {
+            //PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+            //if (playerHealth != null && !isParried)
+            //{
+            //    playerHealth.TakeDamage(damageAmount);
+            //}
+        }
+    }
+
+    public void HandleParry()
+    {
+        isParried = true;
+        onParried?.Invoke();
+        Debug.Log(gameObject.name + " was parried!");
+    }
+
+    private void OnDisable()
+    {
+        isParried = false;
     }
 
     public void SetDamage(int amount)

@@ -3,6 +3,12 @@ using UnityEngine.Events; // For the attack event
 
 public class EnemyController : MonoBehaviour
 {
+    // Add these fields to the existing ones
+    [Header("Parry Settings")]
+    [SerializeField] private float parryStunDuration = 1.5f;
+    private bool isStunned = false;
+    private float stunTimer = 0f;
+    
     [Header("Attack Settings")]
     [SerializeField] private float attackRange = 1.5f;
     [SerializeField] private float attackCooldown = 1f;
@@ -80,6 +86,16 @@ public class EnemyController : MonoBehaviour
         if (onAttackPerformed == null)
             onAttackPerformed = new UnityEvent();
         
+        // Add this to existing Start method
+        if (attackHitbox != null)
+        {
+            AttackHitbox hitboxComponent = attackHitbox.GetComponent<AttackHitbox>();
+            if (hitboxComponent != null)
+            {
+                hitboxComponent.onParried.AddListener(OnParried);
+            }
+        }
+        
         if (attackHitbox != null)
         {
             attackHitbox.SetActive(false);
@@ -88,6 +104,17 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
+        // Add this at the start of the existing Update method
+        if (isStunned)
+        {
+            stunTimer -= Time.deltaTime;
+            if (stunTimer <= 0f)
+            {
+                isStunned = false;
+            }
+            return; // Skip normal behavior while stunned
+        }
+        
         // Update attack timer
         if (!canAttack)
         {
@@ -343,6 +370,17 @@ public class EnemyController : MonoBehaviour
         {
             attackHitbox.SetActive(false);
         }
+    }
+
+    private void OnParried()
+    {
+        isStunned = true;
+        stunTimer = parryStunDuration;
+        EndAttack(); // End the current attack
+        
+        // Optional: Add visual feedback
+        // You might want to play an animation, particle effect, or sound here
+        Debug.Log("Enemy was parried!");
     }
 
 

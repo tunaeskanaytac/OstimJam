@@ -4,8 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Add this to your PlayerController class
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private GameObject attackHitbox;
+    [SerializeField] private float attackDuration = 0.2f;
+    private bool isAttacking = false;
+    private float attackTimer = 0f;
     #region References
     private Rigidbody2D _rb;
     private BoxCollider2D _collider;
@@ -55,6 +60,16 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        if (attackHitbox != null)
+        {
+            // Make sure the hitbox is marked as a player hitbox
+            AttackHitbox hitboxComponent = attackHitbox.GetComponent<AttackHitbox>();
+            if (hitboxComponent != null)
+            {
+                hitboxComponent.isPlayerHitbox = true;
+            }
+            attackHitbox.SetActive(false);
+        }
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
         _collider = GetComponent<BoxCollider2D>();
@@ -64,6 +79,16 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        // Update attack timer
+        if (isAttacking)
+        {
+            attackTimer -= Time.deltaTime;
+            if (attackTimer <= 0f)
+            {
+                EndAttack();
+            }
+        }
+
         CheckForLedge();
         CheckInput();
         CheckMovementDirection();
@@ -83,6 +108,10 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            PerformAttack();
+        }
         _movementInputDirection = Input.GetAxisRaw("Horizontal");
         // CHECK ROLL
         if (Input.GetKeyDown(KeyCode.LeftShift) && _canRoll && !_isRolling && groundCheck.IsGrounded)
@@ -208,7 +237,7 @@ public class PlayerController : MonoBehaviour
     private void UpdateAnimations()
     {
         _anim.SetBool("_isRunning", _isRunning);
-        _anim.SetBool("isGrounded", IsGrounded());
+        _anim.SetBool("isGrounded", groundCheck.IsGrounded);;
     }
 
     private void CheckForLedge()
@@ -269,5 +298,22 @@ public class PlayerController : MonoBehaviour
         Vector2 boxCastPos = (Vector2)_collider.bounds.center + Vector2.down * extraHeight / 2;
 
         Gizmos.DrawWireCube(boxCastPos, new Vector2(_collider.bounds.size.x / 1.1f, _collider.bounds.size.y + extraHeight));
+    }
+
+    public void PerformAttack()
+    {
+        if (isAttacking) return;
+        _anim.SetBool("isAttacking", true);
+
+        isAttacking = true;
+        attackTimer = attackDuration;
+        attackHitbox.SetActive(true);
+    }
+
+    private void EndAttack()
+    {
+        _anim.SetBool("isAttacking", false);
+        isAttacking = false;
+        attackHitbox.SetActive(false);
     }
 }
