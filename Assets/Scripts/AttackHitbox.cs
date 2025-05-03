@@ -17,14 +17,7 @@ public class AttackHitbox : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy"))
-        {
-            EnemyController enemy = collision.GetComponent<EnemyController>();
-            if (enemy != null)
-            {
-                enemy.Die();
-            }
-        }
+   
     }
 
     private void OnTriggerStay2D(Collider2D other)
@@ -43,15 +36,22 @@ public class AttackHitbox : MonoBehaviour
                 return;
             }
         }
-
-        // Normal attack logic
-        if (other.CompareTag(isPlayerHitbox ? "Enemy" : "Player"))
+        if (other.CompareTag("Enemy"))
         {
-            //PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
-            //if (playerHealth != null && !isParried)
-            //{
-            //    playerHealth.TakeDamage(damageAmount);
-            //}
+            EnemyController enemy = other.GetComponent<EnemyController>();
+            if (enemy != null)
+            {
+                enemy.Die();
+            }
+        }
+        // Normal attack logic
+        if (other.CompareTag("Player"))
+        {
+            PlayerController player = other.GetComponent<PlayerController>();
+            if (player != null)
+            {
+                player.Die();
+            }
         }
     }
 
