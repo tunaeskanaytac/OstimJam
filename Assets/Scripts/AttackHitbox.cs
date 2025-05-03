@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 using UnityEngine.Events;
 
 public class AttackHitbox : MonoBehaviour
 {
+    [SerializeField] private GameObject sliceEffect;
     [SerializeField] private int damageAmount = 10;
     public bool isPlayerHitbox = false;
     
@@ -13,6 +16,18 @@ public class AttackHitbox : MonoBehaviour
     {
         if (onParried == null)
             onParried = new UnityEvent();
+    }
+
+    private void OnEnable()
+    {
+        StartCoroutine(SliceMeUpBaby());
+    }
+
+    private IEnumerator SliceMeUpBaby()
+    {
+        sliceEffect.SetActive(false);
+        yield return new WaitForSeconds(0.12f);
+        sliceEffect.SetActive(true);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
