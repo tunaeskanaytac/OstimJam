@@ -319,7 +319,6 @@ public class PlayerController : MonoBehaviour
     public void PerformAttack()
     {
         if (isAttacking || !canAttack) return;
-
         _anim.SetBool("isAttacking", true);
         isAttacking = true;
         canAttack = false;
@@ -333,5 +332,10 @@ public class PlayerController : MonoBehaviour
         _anim.SetBool("isAttacking", false);
         isAttacking = false;
         attackHitbox.SetActive(false);
+    }
+
+    private IEnumerator DelayAttack(float duration)
+    {
+        yield return new WaitForSeconds(duration);
     }
 }
