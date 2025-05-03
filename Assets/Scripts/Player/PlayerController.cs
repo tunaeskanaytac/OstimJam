@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
     private bool _canMove = true;
     private bool _isFacingRight = true;
     private bool _isRunning;
-    private bool _canGetHurt;
+    public bool _canGetHurt = true;
     #endregion
 
     #region Movement Variables
