@@ -5,6 +5,8 @@ namespace Enemy
 {
     public class EnemyController : MonoBehaviour
     {
+        private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
+
         [Header("Movement Settings")]
         [SerializeField] private float moveSpeed = 3f;
         [SerializeField] private float detectionRange = 5f;
@@ -24,6 +26,7 @@ namespace Enemy
         [Header("References")]
         private Rigidbody2D rb;
         private Transform playerTransform;
+        private Animator animator;
         
         [Header("State")]
         private bool isPlayerInRange;
@@ -34,6 +37,7 @@ namespace Enemy
         
         private void Awake()
         {
+            animator = GetComponent<Animator>();
             rb = GetComponent<Rigidbody2D>();
             FindPlayer();
             
@@ -67,6 +71,7 @@ namespace Enemy
         private IEnumerator PerformAttack()
         {
             canAttack = false;
+            animator.SetBool(IsAttacking, true);
 
             // Activate attack object
             if (attackObject != null)
@@ -87,7 +92,8 @@ namespace Enemy
                 Debug.LogWarning("Attack object is not assigned!");
                 yield return new WaitForSeconds(attackCooldown);
             }
-
+            
+            animator.SetBool(IsAttacking, false);
             canAttack = true;
         }
 
@@ -191,6 +197,45 @@ namespace Enemy
         private void OnDrawGizmosSelected()
         {
             if (!debugVision) return;
+            
+            // Draw main detection range
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, detectionRange);
+            
+            // Draw close detection radius (360-degree detection)
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, closeDetectionRadius);
+            
+            // Draw stop distance
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, stopDistance);
+            
+            // Draw vision cone
+            Gizmos.color = Color.blue;
+            Vector3 facingDirection = isFacingRight ? Vector3.right : Vector3.left;
+            Vector3 rightBoundary = Quaternion.Euler(0, 0, fieldOfViewAngle * 0.5f) * facingDirection;
+            Vector3 leftBoundary = Quaternion.Euler(0, 0, -fieldOfViewAngle * 0.5f) * facingDirection;
+            
+            // Only draw vision cone from close detection radius to detection range
+            Vector3 closeRightStart = transform.position + rightBoundary * closeDetectionRadius;
+            Vector3 closeLeftStart = transform.position + leftBoundary * closeDetectionRadius;
+            Vector3 farRightEnd = transform.position + rightBoundary * detectionRange;
+            Vector3 farLeftEnd = transform.position + leftBoundary * detectionRange;
+            
+            Gizmos.DrawLine(closeRightStart, farRightEnd);
+            Gizmos.DrawLine(closeLeftStart, farLeftEnd);
+            
+            // Draw arc for outer detection range
+            int segments = 20;
+            Vector3 previousPoint = farRightEnd;
+            for (int i = 1; i <= segments; i++)
+            {
+                float angle = fieldOfViewAngle * ((float)i / segments - 0.5f);
+                Vector3 currentPoint = transform.position + 
+                    (Quaternion.Euler(0, 0, angle) * facingDirection) * detectionRange;
+                Gizmos.DrawLine(previousPoint, currentPoint);
+                previousPoint = currentPoint;
+            }
             
             // Previous Gizmos drawing code remains unchanged
             
