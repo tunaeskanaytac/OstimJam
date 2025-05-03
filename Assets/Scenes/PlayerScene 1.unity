@@ -1289,6 +1289,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 1930339758497343912, guid: c157c2bc2525e2149999bf7243505cc0, type: 3}
+    - target: {fileID: 8210417707272922629, guid: b5fabfdec3dadc14a9103a8af52deefe, type: 3}
+      propertyPath: sliceEffect
+      value: 
+      objectReference: {fileID: 2076710012}
     - target: {fileID: 8718998680909337811, guid: b5fabfdec3dadc14a9103a8af52deefe, type: 3}
       propertyPath: m_IsTrigger
       value: 1

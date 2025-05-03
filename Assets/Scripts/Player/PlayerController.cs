@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float attackDuration = 0.2f;
     private bool isAttacking = false;
     private float attackTimer = 5f;
+
     #region References
     private Rigidbody2D _rb;
     private BoxCollider2D _collider;
@@ -38,6 +39,7 @@ public class PlayerController : MonoBehaviour
     private bool _isFacingRight = true;
     private bool _isRunning;
     public bool _canGetHurt = true;
+    private bool _isDying = false;
     #endregion
 
     #region Movement Variables
@@ -52,6 +54,8 @@ public class PlayerController : MonoBehaviour
     private float _rollTime = 0.5f;
     private float _rollSpeed = 10f;
     private int _extraJump = 1;
+    public bool isParrying = false;
+    private bool _canParry = true;
     #endregion
 
     [Header("Ledge Info")]
@@ -127,6 +131,10 @@ public class PlayerController : MonoBehaviour
         {
             PerformAttack();
         }
+        else if (Input.GetKeyDown(KeyCode.Mouse1) && _canParry)
+        {
+            StartCoroutine(Parry());
+        }
         _movementInputDirection = Input.GetAxisRaw("Horizontal");
         // CHECK ROLL
         if (Input.GetKeyDown(KeyCode.LeftShift) && _canRoll && !_isRolling && groundCheck.IsGrounded)
@@ -194,7 +202,7 @@ public class PlayerController : MonoBehaviour
         _anim.SetTrigger("Roll");
         _canRoll = false;
         _isRolling = true;
-        _canGetHurt = true;
+        _canGetHurt = false;
 
         Vector2 originalSize = _collider.size;
         Vector2 originalOffset = _collider.offset;
@@ -207,7 +215,7 @@ public class PlayerController : MonoBehaviour
         _collider.size = originalSize;
         _collider.offset = originalOffset;
 
-        _canGetHurt = false;
+        _canGetHurt = true;
         _isRolling = false;
         _canRoll = true;
     }
@@ -235,18 +243,30 @@ public class PlayerController : MonoBehaviour
 
     public void Die()
     {
-        StartCoroutine(Respawn(1f));
+        if (!_isDying)
+        {
+            _isDying = true;
+            _anim.SetTrigger("Death");
+            StartCoroutine(Respawn(2.53f));
+        }
+        else
+        {
+            return;
+        }
     }
 
     private IEnumerator Respawn(float duration)
     {
         _rb.linearVelocity = new Vector2(0, 0);
-        _rb.simulated = false;
-        transform.localScale = new Vector3(0, 0, 0);
+        //_rb.simulated = false;
+        _canMove = false;
+        //transform.localScale = new Vector3(0, 0, 0);
         yield return new WaitForSeconds(duration);
         transform.position = _startPos;
-        transform.localScale = new Vector3(1f, 1f, 1f);
-        _rb.simulated = true;
+        _isDying = false;
+        //transform.localScale = new Vector3(1f, 1f, 1f);
+        //_rb.simulated = true;
+        _canMove = true;
     }
 
     private void UpdateAnimations()
@@ -334,8 +354,13 @@ public class PlayerController : MonoBehaviour
         attackHitbox.SetActive(false);
     }
 
-    private IEnumerator DelayAttack(float duration)
+    private IEnumerator Parry()
     {
-        yield return new WaitForSeconds(duration);
+        _anim.SetTrigger("Parry");
+        isParrying = true;
+        _canParry = false;
+        yield return new WaitForSeconds(0.89f);
+        isParrying = false;
+        _canParry = true;
     }
 }
