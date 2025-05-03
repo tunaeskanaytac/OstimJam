@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 _climbBegunPosition;
     private Vector2 _climbOverPosition;
     private bool _canGrabLedge = true;
-    private bool _canClimb = true;
+    // private bool _canClimb = true;
 
     private void Start()
     {

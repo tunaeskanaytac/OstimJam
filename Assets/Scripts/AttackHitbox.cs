@@ -9,7 +9,7 @@ public class AttackHitbox : MonoBehaviour
     [SerializeField] private GameObject sliceEffect;
     public bool isPlayerHitbox = false;
 
-    private EnemyController lastEnemy;
+    private FinalEnemyBehaviour lastEnemy;
 
     public UnityEvent onParried;
     private bool isParried = false;
@@ -39,17 +39,17 @@ public class AttackHitbox : MonoBehaviour
 
         if (other.CompareTag("Enemy"))
         {
-            lastEnemy = other.GetComponent<EnemyController>();
+            lastEnemy = other.GetComponent<FinalEnemyBehaviour>();
             if (lastEnemy != null)
             {
                 if (!isPlayerHitbox)
                 {
-                    lastEnemy.Die();
+                    lastEnemy.Death();
                     timer.elapsedTime += 3;
                 }
             }
         }
-
+        /*
         if (other.CompareTag("Player"))
         {
             PlayerController player = other.GetComponent<PlayerController>();
@@ -68,5 +68,6 @@ public class AttackHitbox : MonoBehaviour
                 }
             }
         }
+        */
     }
 }
