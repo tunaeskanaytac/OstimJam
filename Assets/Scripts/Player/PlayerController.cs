@@ -7,10 +7,15 @@ using UnityEngine.SceneManagement;
 // Add this to your PlayerController class
 public class PlayerController : MonoBehaviour
 {
+    // Add these new fields with the existing attack-related fields
+    [Header("Attack Settings")]
+    [SerializeField] private float attackCooldown = 0.5f; // Time between attacks
+    private bool canAttack = true;
+    private float cooldownTimer = 0f;
     [SerializeField] private GameObject attackHitbox;
     [SerializeField] private float attackDuration = 0.2f;
     private bool isAttacking = false;
-    private float attackTimer = 0f;
+    private float attackTimer = 5f;
     #region References
     private Rigidbody2D _rb;
     private BoxCollider2D _collider;
@@ -79,6 +84,16 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        // Add this to your existing Update method
+        if (!canAttack)
+        {
+            cooldownTimer -= Time.deltaTime;
+            if (cooldownTimer <= 0f)
+            {
+                canAttack = true;
+            }
+        }
+
         // Update attack timer
         if (isAttacking)
         {
@@ -302,10 +317,12 @@ public class PlayerController : MonoBehaviour
 
     public void PerformAttack()
     {
-        if (isAttacking) return;
-        _anim.SetBool("isAttacking", true);
+        if (isAttacking || !canAttack) return;
 
+        _anim.SetBool("isAttacking", true);
         isAttacking = true;
+        canAttack = false;
+        cooldownTimer = attackCooldown;
         attackTimer = attackDuration;
         attackHitbox.SetActive(true);
     }
