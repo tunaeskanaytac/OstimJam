@@ -1,25 +1,58 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.Events;
 
 public class AttackHitbox : MonoBehaviour
 {
-    [SerializeField] private int damageAmount = 10;
+    [SerializeField] private GameObject sliceEffect;
+    public bool isPlayerHitbox = false;
     
-    private void OnTriggerEnter2D(Collider2D other)
+    public UnityEvent onParried;
+    private bool isParried = false;
+
+    private void Start()
     {
-        Debug.Log("Hitbox triggered");
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log("Sword on player");
-            // PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
-            // if (playerHealth != null)
-            // {
-            //     playerHealth.TakeDamage(damageAmount);
-            // }
-        }
+        if (onParried == null)
+            onParried = new UnityEvent();
     }
 
-    public void SetDamage(int amount)
+    private void OnEnable()
     {
-        damageAmount = amount;
+        StartCoroutine(SliceMeUpBaby());
+    }
+
+    private IEnumerator SliceMeUpBaby()
+    {
+        sliceEffect.SetActive(false);
+        yield return new WaitForSeconds(0.12f);
+        sliceEffect.SetActive(true);
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (isParried) return;
+
+        if (other.CompareTag("Enemy"))
+        {
+            EnemyController enemy = other.GetComponent<EnemyController>();
+            if (enemy != null)
+            {
+                enemy.Die();
+            }
+        }
+        // Normal attack logic
+        if (other.CompareTag("Player"))
+        {
+            PlayerController player = other.GetComponent<PlayerController>();
+            if (player != null && player._canGetHurt && !player.isParrying)
+            {
+                player.Die();
+            }
+            else if (player != null && player._canGetHurt && player.isParrying)
+            {
+                onParried?.Invoke();
+            }
+        }
     }
 }

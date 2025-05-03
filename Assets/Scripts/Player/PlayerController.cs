@@ -4,8 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Add this to your PlayerController class
 public class PlayerController : MonoBehaviour
 {
+    // Add these new fields with the existing attack-related fields
+    [Header("Attack Settings")]
+    [SerializeField] private float attackCooldown = 0.5f; // Time between attacks
+    private bool canAttack = true;
+    private float cooldownTimer = 0f;
+    [SerializeField] private GameObject attackHitbox;
+    [SerializeField] private float attackDuration = 0.2f;
+    private bool isAttacking = false;
+    private float attackTimer = 5f;
+
     #region References
     private Rigidbody2D _rb;
     private BoxCollider2D _collider;
@@ -27,7 +38,8 @@ public class PlayerController : MonoBehaviour
     private bool _canMove = true;
     private bool _isFacingRight = true;
     private bool _isRunning;
-    private bool _canGetHurt;
+    public bool _canGetHurt = true;
+    private bool _isDying = false;
     #endregion
 
     #region Movement Variables
@@ -42,6 +54,8 @@ public class PlayerController : MonoBehaviour
     private float _rollTime = 0.5f;
     private float _rollSpeed = 10f;
     private int _extraJump = 1;
+    public bool isParrying = false;
+    private bool _canParry = true;
     #endregion
 
     [Header("Ledge Info")]
@@ -51,10 +65,20 @@ public class PlayerController : MonoBehaviour
     private Vector2 _climbBegunPosition;
     private Vector2 _climbOverPosition;
     private bool _canGrabLedge = true;
-    private bool _canClimb;
+    private bool _canClimb = true;
 
     private void Start()
     {
+        if (attackHitbox != null)
+        {
+            // Make sure the hitbox is marked as a player hitbox
+            AttackHitbox hitboxComponent = attackHitbox.GetComponent<AttackHitbox>();
+            if (hitboxComponent != null)
+            {
+                hitboxComponent.isPlayerHitbox = true;
+            }
+            attackHitbox.SetActive(false);
+        }
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
         _collider = GetComponent<BoxCollider2D>();
@@ -64,6 +88,26 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        // Add this to your existing Update method
+        if (!canAttack)
+        {
+            cooldownTimer -= Time.deltaTime;
+            if (cooldownTimer <= 0f)
+            {
+                canAttack = true;
+            }
+        }
+
+        // Update attack timer
+        if (isAttacking)
+        {
+            attackTimer -= Time.deltaTime;
+            if (attackTimer <= 0f)
+            {
+                EndAttack();
+            }
+        }
+
         CheckForLedge();
         CheckInput();
         CheckMovementDirection();
@@ -83,6 +127,14 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            PerformAttack();
+        }
+        else if (Input.GetKeyDown(KeyCode.Mouse1) && _canParry)
+        {
+            StartCoroutine(Parry());
+        }
         _movementInputDirection = Input.GetAxisRaw("Horizontal");
         // CHECK ROLL
         if (Input.GetKeyDown(KeyCode.LeftShift) && _canRoll && !_isRolling && groundCheck.IsGrounded)
@@ -150,7 +202,7 @@ public class PlayerController : MonoBehaviour
         _anim.SetTrigger("Roll");
         _canRoll = false;
         _isRolling = true;
-        _canGetHurt = true;
+        _canGetHurt = false;
 
         Vector2 originalSize = _collider.size;
         Vector2 originalOffset = _collider.offset;
@@ -163,7 +215,7 @@ public class PlayerController : MonoBehaviour
         _collider.size = originalSize;
         _collider.offset = originalOffset;
 
-        _canGetHurt = false;
+        _canGetHurt = true;
         _isRolling = false;
         _canRoll = true;
     }
@@ -191,29 +243,42 @@ public class PlayerController : MonoBehaviour
 
     public void Die()
     {
-        StartCoroutine(Respawn(1f));
+        if (!_isDying)
+        {
+            _isDying = true;
+            _anim.SetTrigger("Death");
+            StartCoroutine(Respawn(2.53f));
+        }
+        else
+        {
+            return;
+        }
     }
 
     private IEnumerator Respawn(float duration)
     {
         _rb.linearVelocity = new Vector2(0, 0);
-        _rb.simulated = false;
-        transform.localScale = new Vector3(0, 0, 0);
+        //_rb.simulated = false;
+        _canMove = false;
+        //transform.localScale = new Vector3(0, 0, 0);
         yield return new WaitForSeconds(duration);
         transform.position = _startPos;
-        transform.localScale = new Vector3(0.6f, 0.6f, 1);
-        _rb.simulated = true;
+        _isDying = false;
+        //transform.localScale = new Vector3(1f, 1f, 1f);
+        //_rb.simulated = true;
+        _canMove = true;
     }
 
     private void UpdateAnimations()
     {
         _anim.SetBool("_isRunning", _isRunning);
-        _anim.SetBool("isGrounded", IsGrounded());
+        _anim.SetBool("isGrounded", groundCheck.IsGrounded);
+        _anim.SetFloat("YVelocity", _rb.linearVelocityY);
     }
 
     private void CheckForLedge()
     {
-        if (isOnLedgeFace.IsOnLedge && !isOnLedgeLegs.IsOnLedge && _canGrabLedge)
+        if (!isOnLedgeFace.IsOnLedge && isOnLedgeLegs.IsOnLedge && _canGrabLedge)
         {
             _canGrabLedge = false;
 
@@ -232,7 +297,9 @@ public class PlayerController : MonoBehaviour
                 _climbBegunPosition = ledgePosition + flippedOffset1;
                 _climbOverPosition = ledgePosition + flippedOffset2;
             }
-
+            _rb.linearVelocity = new Vector2(0, 0);
+            _rb.simulated = false;
+            transform.localScale = new Vector3(0, 0, 0);
             StartCoroutine(ClimbLedge());
         }
     }
@@ -251,7 +318,8 @@ public class PlayerController : MonoBehaviour
         transform.position = _climbOverPosition;
 
         yield return new WaitForSeconds(0.2f); // Wait a bit after animation
-
+        transform.localScale = new Vector3(1f, 1f, 1f);
+        _rb.simulated = true;
         _canMove = true;
         _canGrabLedge = true;
     }
@@ -266,5 +334,33 @@ public class PlayerController : MonoBehaviour
         Vector2 boxCastPos = (Vector2)_collider.bounds.center + Vector2.down * extraHeight / 2;
 
         Gizmos.DrawWireCube(boxCastPos, new Vector2(_collider.bounds.size.x / 1.1f, _collider.bounds.size.y + extraHeight));
+    }
+
+    public void PerformAttack()
+    {
+        if (isAttacking || !canAttack) return;
+        _anim.SetBool("isAttacking", true);
+        isAttacking = true;
+        canAttack = false;
+        cooldownTimer = attackCooldown;
+        attackTimer = attackDuration;
+        attackHitbox.SetActive(true);
+    }
+
+    private void EndAttack()
+    {
+        _anim.SetBool("isAttacking", false);
+        isAttacking = false;
+        attackHitbox.SetActive(false);
+    }
+
+    private IEnumerator Parry()
+    {
+        _anim.SetTrigger("Parry");
+        isParrying = true;
+        _canParry = false;
+        yield return new WaitForSeconds(0.89f);
+        isParrying = false;
+        _canParry = true;
     }
 }
