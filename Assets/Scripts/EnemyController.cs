@@ -397,19 +397,6 @@ public class EnemyController : MonoBehaviour
             waitTimer = 0f;
         }
     }
-    
-    // Optional: Method to set damage amount at runtime
-    public void SetAttackDamage(int amount)
-    {
-        if (attackHitbox != null)
-        {
-            AttackHitbox hitboxComponent = attackHitbox.GetComponent<AttackHitbox>();
-            if (hitboxComponent != null)
-            {
-                hitboxComponent.SetDamage(amount);
-            }
-        }
-    }
 
     private void OnDrawGizmosSelected()
     {
