@@ -412,7 +412,6 @@ MonoBehaviour:
   attackCooldown: 0.83
   attackHitbox: {fileID: 3746457398294958219}
   attackDuration: 0.2
-  timer: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64

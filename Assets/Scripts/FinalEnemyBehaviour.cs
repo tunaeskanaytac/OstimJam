@@ -29,6 +29,7 @@ public class FinalEnemyBehaviour : MonoBehaviour
     private Transform target;
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D rigidBody;
+    private ShakeTrigger shakeTrigger;
     //[SerializeField] private GameObject attackObject;
     [SerializeField] private Animator anim;
 
@@ -38,6 +39,7 @@ public class FinalEnemyBehaviour : MonoBehaviour
 
     private void Start()
     {
+        shakeTrigger = GetComponent<ShakeTrigger>();
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigidBody = GetComponent<Rigidbody2D>();
@@ -207,11 +209,21 @@ public class FinalEnemyBehaviour : MonoBehaviour
 
     public IEnumerator Death()
     {
+        shakeTrigger.TriggerShake();
+        StartCoroutine(StopTime(0.1f));
         _dying = true;
         anim.SetTrigger("Death");
         Timer.instance.AddTime(3f);
         yield return new WaitForSeconds(2f);
         Destroy(gameObject);
+    }
+
+    private IEnumerator StopTime(float duration)
+    {
+        float originalTimeScale = Time.timeScale;
+        Time.timeScale = 0f;
+        yield return new WaitForSecondsRealtime(duration);
+        Time.timeScale = originalTimeScale;
     }
 
     private bool CanSeePlayer()
@@ -234,6 +246,8 @@ public class FinalEnemyBehaviour : MonoBehaviour
     {
         if (!_isKnockedBack)
         {
+            shakeTrigger.TriggerShake();
+            StartCoroutine(StopTime(0.1f));
             StartCoroutine(HandleKnockback(parrySourcePosition, knockbackForce, 0.5f));
         }
     }
