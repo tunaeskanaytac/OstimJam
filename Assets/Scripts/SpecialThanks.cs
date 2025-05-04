@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class SpecialThanks : MonoBehaviour
 {
@@ -38,6 +39,7 @@ public class SpecialThanks : MonoBehaviour
         // 2. Or destroy/deactivate it
         if (textRectTransform.position.y > (startPosition.y + textHeight + Screen.height))
         {
+            SceneManager.LoadScene("MainMenu");
             // Option 1: Reset position
             textRectTransform.position = startPosition;
             
