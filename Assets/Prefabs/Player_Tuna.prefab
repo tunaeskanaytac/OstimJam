@@ -371,6 +371,7 @@ GameObject:
   - component: {fileID: 1268981685743095310}
   - component: {fileID: 704730643588134014}
   - component: {fileID: 3073891362899758413}
+  - component: {fileID: 2392040033851249321}
   m_Layer: 7
   m_Name: Player_Tuna
   m_TagString: Player
@@ -412,6 +413,7 @@ MonoBehaviour:
   attackCooldown: 0.83
   attackHitbox: {fileID: 3746457398294958219}
   attackDuration: 0.2
+  isAttacking: 0
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -578,6 +580,21 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1.4782609}
   m_EdgeRadius: 0
+--- !u!114 &2392040033851249321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6753413405491745693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15f5f11a34b949f89e4a5f9223ccf3c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  darkPanel: {fileID: 0}
+  gameOverText: {fileID: 0}
+  fadeDuration: 2
 --- !u!1 &7448835130629441047
 GameObject:
   m_ObjectHideFlags: 0
