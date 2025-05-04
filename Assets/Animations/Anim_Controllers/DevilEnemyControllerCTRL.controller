@@ -7,7 +7,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: fightvillian4_Clip
+  m_Name: fightdevil_Clip
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -21,7 +21,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: bf5fdd73a7d8b4d12a7341460cf51760, type: 2}
+  m_Motion: {fileID: 6015128838062027095, guid: 1d489ad20c5ab8b4c9f9a80ecb95e450, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -56,7 +56,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: walkinvillian_Clip
+  m_Name: walkindevil_Clip
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -70,7 +70,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 6408919631e6a435384dc656f760e2a6, type: 2}
+  m_Motion: {fileID: 7400000, guid: a72583725dc0a694a86a5dc50d436db7, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -83,7 +83,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: goredeath_Clip
+  m_Name: devildeath_Clip
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -97,7 +97,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 4348403809f004b31b6cceb9747bffd1, type: 2}
+  m_Motion: {fileID: -1916757488376808499, guid: 56136b2b527fdf94c9eaebc65018f13e, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -164,7 +164,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: EnemyControllerCTRL
+  m_Name: DevilEnemyControllerCTRL
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: IsRunning
@@ -211,7 +211,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: villianidle_Clip
+  m_Name: devilidle_Clip
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -225,7 +225,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: b26882bf95eba473485464072d9e0189, type: 2}
+  m_Motion: {fileID: 7400000, guid: ddb65b48a93446d4ca9d8eaa154cbc01, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
