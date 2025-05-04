@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -278,7 +279,10 @@ public class PlayerController : MonoBehaviour
         //transform.localScale = new Vector3(1f, 1f, 1f);
         //_rb.simulated = true;
         _canMove = true;
-        Timer.instance.elapsedTime = 15f;
+        Timer.instance.elapsedTime = 30f;
+
+        UnityEngine.SceneManagement.Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
     }
 
     private void UpdateAnimations()

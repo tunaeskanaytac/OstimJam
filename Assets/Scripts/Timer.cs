@@ -13,7 +13,7 @@ public class Timer : MonoBehaviour
 
     private void Start()
     {
-        elapsedTime = 15f;
+        elapsedTime = 30f;
     }
 
     private void Awake()
