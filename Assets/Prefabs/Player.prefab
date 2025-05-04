@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4463576468728838661}
   m_Layer: 0
   m_Name: SlashEffect
-  m_TagString: Untagged
+  m_TagString: Sword
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 8210417707272922629}
   m_Layer: 0
   m_Name: sword
-  m_TagString: Untagged
+  m_TagString: Sword
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -427,6 +427,8 @@ MonoBehaviour:
   isParrying: 0
   offset1: {x: -0.3, y: -0.5}
   offset2: {x: 0.5, y: 1}
+  attackDashForce: 5
+  attackDashDuration: 0.1
 --- !u!212 &8122977624403182078
 SpriteRenderer:
   m_ObjectHideFlags: 0

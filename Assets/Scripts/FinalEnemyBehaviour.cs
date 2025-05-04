@@ -31,7 +31,6 @@ public class FinalEnemyBehaviour : MonoBehaviour
     private Rigidbody2D rigidBody;
     //[SerializeField] private GameObject attackObject;
     [SerializeField] private Animator anim;
-    public Timer timer;
 
     [Header("Enemy Search")]
     private float moveTimer = 0f;
@@ -210,8 +209,7 @@ public class FinalEnemyBehaviour : MonoBehaviour
     {
         _dying = true;
         anim.SetTrigger("Death");
-        Debug.Log("Enemy has died!");
-        timer.elapsedTime += 3f;
+        Timer.instance.AddTime(3f);
         yield return new WaitForSeconds(2f);
         Destroy(gameObject);
     }
