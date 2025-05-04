@@ -23,6 +23,7 @@ public class FinalEnemyBehaviour : MonoBehaviour
     private int _facingDirection = 1;
     private bool _isFacingRight = true;
     private bool _dying = false;
+    private bool _isKnockedBack = false;
 
     [Header("Components")]
     private Transform target;
@@ -47,6 +48,9 @@ public class FinalEnemyBehaviour : MonoBehaviour
 
     private void Update()
     {
+        if (_isKnockedBack || _dying)
+            return;
+
         UpdateAnimations();
         canSee = CanSeePlayer();
 
@@ -85,14 +89,21 @@ public class FinalEnemyBehaviour : MonoBehaviour
         }
         else if (isAgro && canSee && distanceToPlayer >= attackRange)
         {
-            if (!_dying)
+            if (!_dying && !_isKnockedBack)
             {
                 Move();
             }
         }
         else
         {
-            PatrolOrIdle();
+            if (!_isKnockedBack)
+            {
+                PatrolOrIdle();
+            }
+            else
+            {
+                rigidBody.linearVelocity = Vector2.zero; // Stop any movement during knockback
+            }
         }
 
         TurnDirection();
@@ -188,7 +199,7 @@ public class FinalEnemyBehaviour : MonoBehaviour
                     }
                     else if (player.isParrying)
                     {
-                        OnParried(player.transform.position, 10f);
+                        OnParried(player.transform.position, 4f);
                     }
                 }
             }
@@ -223,9 +234,23 @@ public class FinalEnemyBehaviour : MonoBehaviour
 
     public void OnParried(Vector2 parrySourcePosition, float knockbackForce)
     {
-        Vector2 knockbackDirection = (transform.position - (Vector3)parrySourcePosition).normalized;
+        if (!_isKnockedBack)
+        {
+            StartCoroutine(HandleKnockback(parrySourcePosition, knockbackForce, 0.5f));
+        }
+    }
+
+    private IEnumerator HandleKnockback(Vector2 source, float force, float duration)
+    {
+        _isKnockedBack = true;
+
+        Vector2 knockbackDir = (transform.position - (Vector3)source).normalized;
         rigidBody.linearVelocity = Vector2.zero;
-        rigidBody.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+        rigidBody.AddForce(knockbackDir * force, ForceMode2D.Impulse);
+
+        yield return new WaitForSeconds(duration);
+
+        _isKnockedBack = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)

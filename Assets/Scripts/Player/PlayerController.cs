@@ -69,6 +69,10 @@ public class PlayerController : MonoBehaviour
     private bool _canGrabLedge = true;
     // private bool _canClimb = true;
 
+    [Header("Attack Dash")]
+    [SerializeField] private float attackDashForce = 5f;
+    [SerializeField] private float attackDashDuration = 0.1f;
+
     private void Start()
     {
         if (attackHitbox != null)
@@ -354,6 +358,8 @@ public class PlayerController : MonoBehaviour
         cooldownTimer = attackCooldown;
         attackTimer = attackDuration;
         attackHitbox.SetActive(true);
+
+        StartCoroutine(AttackDash()); // we use this if we want to dash attack.
     }
 
     private void EndAttack()
@@ -371,5 +377,19 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.89f);
         isParrying = false;
         _canParry = true;
+    }
+
+    private IEnumerator AttackDash()
+    {
+        // will also use trail renderer here. To give dash an effect by decreasing the opacity of sprite(last sprite in frame when attacked).
+
+        _canMove = false;
+        float startTime = Time.time;
+        while (Time.time < startTime + attackDashDuration)
+        {
+            _rb.linearVelocity = new Vector2(attackDashForce * _facingDirection, _rb.linearVelocity.y);
+            yield return null;
+        }
+        _canMove = true;
     }
 }
