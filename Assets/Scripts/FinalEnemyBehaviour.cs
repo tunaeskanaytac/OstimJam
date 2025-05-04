@@ -213,7 +213,7 @@ public class FinalEnemyBehaviour : MonoBehaviour
         StartCoroutine(StopTime(0.1f));
         _dying = true;
         anim.SetTrigger("Death");
-        Timer.instance.AddTime(3f);
+        Timer.instance.AddTime(5f);
         yield return new WaitForSeconds(2f);
         Destroy(gameObject);
     }

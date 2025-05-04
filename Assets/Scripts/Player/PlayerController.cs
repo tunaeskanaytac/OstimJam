@@ -76,6 +76,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        _canMove = true;
         if (attackHitbox != null)
         {
             // Make sure the hitbox is marked as a player hitbox
@@ -395,5 +396,13 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
         _canMove = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Dad"))
+        {
+            _canMove = false;
+        }
     }
 }

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 505b4642acb3e427f8982102a1ce1374
+guid: 55276c309ac3f412caf41344a36ee0e4
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -35,7 +35,7 @@ ScriptedImporter:
     spriteMeshType: 1
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 100
+    spritePixelsToUnits: 24
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -97,7 +97,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 0
+  platformSettingsDirtyTick: 638819762546951080
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -122,9 +122,51 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: dad
+  - name: Frame_0
     originalName: 
-    pivot: {x: 0.7608696, y: -0.96969694}
+    pivot: {x: 0.7857143, y: -0.8648649}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 33
+      y: 50
+      width: 21
+      height: 37
+    spriteID: 726c68fa23d3c4b92b0388ca3c5f83e3
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 33, y: 50}
+  - name: Frame_1
+    originalName: 
+    pivot: {x: 0.7857143, y: -0.84210527}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 51
+      width: 21
+      height: 38
+    spriteID: bbed06d7bccf64b5d8b0cc9f19a85e2f
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 51}
+  - name: Frame_2
+    originalName: 
+    pivot: {x: 0.7857143, y: -0.82051283}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -132,9 +174,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 23
-      height: 33
-    spriteID: 316bb10f578914bc18ab32eb0f24e2f4
+      width: 21
+      height: 39
+    spriteID: 322874dc56f934c94ae4d04bcd9ce198
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -143,24 +185,72 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
+  - name: Frame_3
+    originalName: 
+    pivot: {x: 0.7857143, y: -0.84210527}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 33
+      y: 4
+      width: 21
+      height: 38
+    spriteID: 866d5e8afde424fbd9d1dae6f9d32b6d
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 33, y: 4}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 1445663621
-    name: dad
+    guid: -838885136
+    name: npc3idle
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: dad
+    - name: Frame_0
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 33
+        x: 34
         y: 32
-        width: 23
-        height: 33
-      spriteId: 316bb10f578914bc18ab32eb0f24e2f4
+        width: 21
+        height: 37
+      spriteId: 726c68fa23d3c4b92b0388ca3c5f83e3
+    - name: Frame_1
+      frameIndex: 1
+      additiveSortOrder: 0
+      cellRect:
+        x: 34
+        y: 32
+        width: 21
+        height: 38
+      spriteId: bbed06d7bccf64b5d8b0cc9f19a85e2f
+    - name: Frame_2
+      frameIndex: 2
+      additiveSortOrder: 0
+      cellRect:
+        x: 34
+        y: 32
+        width: 21
+        height: 39
+      spriteId: 322874dc56f934c94ae4d04bcd9ce198
+    - name: Frame_3
+      frameIndex: 3
+      additiveSortOrder: 0
+      cellRect:
+        x: 34
+        y: 32
+        width: 21
+        height: 38
+      spriteId: 866d5e8afde424fbd9d1dae6f9d32b6d
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -171,6 +261,30 @@ ScriptedImporter:
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: DefaultTexturePlatform
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Standalone
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
     compressionQuality: 50
     forceMaximumCompressionQuality_BC6H_BC7: 0
     crunchedCompression: 0
