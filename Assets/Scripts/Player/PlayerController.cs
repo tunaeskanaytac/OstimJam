@@ -75,6 +75,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float attackDashForce = 5f;
     [SerializeField] private float attackDashDuration = 0.1f;
 
+    private AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
+
     private void Start()
     {
         _canMove = true;
@@ -208,12 +216,14 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
+        audioManager.PlaySFX(audioManager.jump);
         _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, jumpForce);
     }
 
     private IEnumerator Roll()
     {
         _anim.SetTrigger("Roll");
+        audioManager.PlaySFX(audioManager.dash);
         _canRoll = false;
         _isRolling = true;
         _canGetHurt = false;
@@ -259,6 +269,7 @@ public class PlayerController : MonoBehaviour
     {
         if ((!_isDying && (!_isRolling || Timer.instance.elapsedTime <= 0) && !isParrying && !isAttacking))
         {
+            audioManager.PlaySFX(audioManager.regularShow);
             _isDying = true;
             _anim.SetTrigger("Death");
             StartCoroutine(Respawn(3f));
@@ -379,6 +390,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator Parry()
     {
         _anim.SetTrigger("Parry");
+        audioManager.PlaySFX(audioManager.parry);
         isParrying = true;
         _canParry = false;
         yield return new WaitForSeconds(0.89f);
@@ -405,6 +417,7 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("Dad"))
         {
             _canMove = false;
+            _rb.linearVelocity = Vector2.zero;
         }
     }
 }

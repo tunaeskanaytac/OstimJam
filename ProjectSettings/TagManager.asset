@@ -9,6 +9,7 @@ TagManager:
   - Sword
   - NPC
   - Dad
+  - Audio
   layers:
   - Default
   - TransparentFX

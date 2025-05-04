@@ -45,6 +45,12 @@ public class GriffithController : MonoBehaviour
     [SerializeField] private float afterImageLifetime = 0.4f;
     [SerializeField] private float afterImageSpawnInterval = 0.05f;
 
+    private AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
 
     private void Start()
     {
@@ -296,6 +302,7 @@ public class GriffithController : MonoBehaviour
     private IEnumerator AttackDash()
     {
         //anim.SetTrigger("EnemyAttack");
+        audioManager.PlaySFX(audioManager.dash);
 
         Vector2 dashDirection = (target.position - transform.position).normalized;
         float elapsed = 0f;

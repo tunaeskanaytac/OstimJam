@@ -25,6 +25,6 @@ public class Dad : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         Destroy(gameObject);
-        
+        SceneManager.LoadScene("SpecialThanks");
     }
 }
