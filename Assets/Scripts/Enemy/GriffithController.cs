@@ -1,10 +1,10 @@
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class FinalEnemyBehaviour : MonoBehaviour
+public class GriffithController : MonoBehaviour
 {
     [Header("Enemy Attributes")]
     [SerializeField] private float moveSpeed;
@@ -24,6 +24,7 @@ public class FinalEnemyBehaviour : MonoBehaviour
     private bool _isFacingRight = true;
     private bool _dying = false;
     private bool _isKnockedBack = false;
+    [SerializeField] private TrailRenderer trailRenderer;
 
     [Header("Components")]
     private Transform target;
@@ -37,10 +38,19 @@ public class FinalEnemyBehaviour : MonoBehaviour
     private float moveTimer = 0f;
     private float moveDuration = 1.6f;
 
+    [SerializeField] private float attackDashForce = 5f;
+    [SerializeField] private float attackDashDuration = 0.1f;
+
+    [SerializeField] private GameObject afterImagePrefab;
+    [SerializeField] private float afterImageLifetime = 0.4f;
+    [SerializeField] private float afterImageSpawnInterval = 0.05f;
+
+
     private void Start()
     {
         shakeTrigger = GetComponent<ShakeTrigger>();
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        trailRenderer = GetComponent<TrailRenderer>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigidBody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -82,7 +92,7 @@ public class FinalEnemyBehaviour : MonoBehaviour
         if (isAgro && canSee && canAttack && distanceToPlayer < attackRange && !_dying)
         {
             Debug.Log("I must hit");
-            
+
             anim.SetTrigger("EnemyAttack");
             rigidBody.linearVelocity = Vector2.zero;
             Attack();
@@ -92,7 +102,15 @@ public class FinalEnemyBehaviour : MonoBehaviour
         {
             if (!_dying && !_isKnockedBack)
             {
-                Move();
+                if (canAttack)
+                {
+                    StartCoroutine(AttackDash());
+                    canAttack = false;
+                }
+                else
+                {
+                    Move(); // fallback movement if dash is on cooldown
+                }
             }
         }
         else
@@ -167,7 +185,7 @@ public class FinalEnemyBehaviour : MonoBehaviour
     private void Attack()
     {
         if (target == null) return;
-    
+
         rigidBody.linearVelocity = Vector2.zero;
 
         // Delay the hit logic to match animation timing
@@ -178,8 +196,10 @@ public class FinalEnemyBehaviour : MonoBehaviour
     private IEnumerator DelayedAttack(float delay)
     {
         anim.SetTrigger("EnemyAttack");
+        float startTime = Time.time;
+       
         yield return new WaitForSeconds(delay);
-        
+
         float distanceToPlayer = Vector2.Distance(transform.position, target.position);
 
         if (target != null && distanceToPlayer <= attackRange)
@@ -192,7 +212,7 @@ public class FinalEnemyBehaviour : MonoBehaviour
             if (hit.collider != null)
             {
                 PlayerController player = hit.collider.GetComponent<PlayerController>();
-                if (player != null && !player._isDying && !player.isAttacking)
+                if (player != null && !player._isDying)
                 {
                     if (player._canGetHurt && !player.isParrying)
                     {
@@ -213,7 +233,7 @@ public class FinalEnemyBehaviour : MonoBehaviour
         StartCoroutine(StopTime(0.1f));
         _dying = true;
         anim.SetTrigger("Death");
-        Timer.instance.AddTime(3f);
+        Timer.instance.AddTime(300f);
         yield return new WaitForSeconds(2f);
         Destroy(gameObject);
     }
@@ -271,6 +291,55 @@ public class FinalEnemyBehaviour : MonoBehaviour
         {
             StartCoroutine(Death());
         }
+    }
+
+    private IEnumerator AttackDash()
+    {
+        //anim.SetTrigger("EnemyAttack");
+
+        Vector2 dashDirection = (target.position - transform.position).normalized;
+        float elapsed = 0f;
+        float spawnTimer = 0f;
+
+        _dying = true; // Prevent other logic during dash
+        float dashEndTime = Time.time + attackDashDuration;
+
+        while (Time.time < dashEndTime)
+        {
+            rigidBody.linearVelocity = dashDirection * attackDashForce;
+
+            // Spawn afterimage periodically
+            spawnTimer += Time.deltaTime;
+            if (spawnTimer >= afterImageSpawnInterval)
+            {
+                SpawnAfterImage();
+                spawnTimer = 0f;
+            }
+
+            yield return null;
+        }
+
+        rigidBody.linearVelocity = Vector2.zero;
+        _dying = false;
+
+        float distanceToPlayer = Vector2.Distance(transform.position, target.position);
+        if (distanceToPlayer <= attackRange && CanSeePlayer())
+        {
+            // Trigger immediate attack
+            Attack();
+        }
+    }
+
+    private void SpawnAfterImage()
+    {
+        GameObject ghost = Instantiate(afterImagePrefab, transform.position, transform.rotation);
+        SpriteRenderer ghostSr = ghost.GetComponent<SpriteRenderer>();
+        ghostSr.sprite = spriteRenderer.sprite;
+        ghostSr.flipX = spriteRenderer.flipX;
+        ghostSr.color = new Color(1f, 1f, 1f, 0.5f);
+        ghost.transform.localScale = transform.localScale;
+
+        Destroy(ghost, afterImageLifetime);
     }
 
     private void OnDrawGizmosSelected()

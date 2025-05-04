@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     private float cooldownTimer = 0f;
     [SerializeField] private GameObject attackHitbox;
     [SerializeField] private float attackDuration = 0.2f;
-    private bool isAttacking = false;
+    public bool isAttacking = false;
     private float attackTimer = 5f;
 
     #region References
@@ -255,7 +255,7 @@ public class PlayerController : MonoBehaviour
 
     public void Die()
     {
-        if ((!_isDying && (!_isRolling || Timer.instance.elapsedTime <= 0) && !isParrying))
+        if ((!_isDying && (!_isRolling || Timer.instance.elapsedTime <= 0) && !isParrying && !isAttacking))
         {
             _isDying = true;
             _anim.SetTrigger("Death");
