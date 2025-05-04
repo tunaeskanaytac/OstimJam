@@ -30,6 +30,7 @@ public class FinalEnemyBehaviour : MonoBehaviour
     private Rigidbody2D rigidBody;
     //[SerializeField] private GameObject attackObject;
     [SerializeField] private Animator anim;
+    public Timer timer;
 
     [Header("Enemy Search")]
     private float moveTimer = 0f;
@@ -185,7 +186,7 @@ public class FinalEnemyBehaviour : MonoBehaviour
                     {
                         player.Die();
                     }
-                    else if (player._canGetHurt && player.isParrying)
+                    else if (player.isParrying)
                     {
                         OnParried(player.transform.position, 10f);
                     }
@@ -199,6 +200,7 @@ public class FinalEnemyBehaviour : MonoBehaviour
         _dying = true;
         anim.SetTrigger("Death");
         Debug.Log("Enemy has died!");
+        timer.elapsedTime += 3f;
         yield return new WaitForSeconds(2f);
         Destroy(gameObject);
     }
