@@ -37,6 +37,13 @@ public class FinalEnemyBehaviour : MonoBehaviour
     private float moveTimer = 0f;
     private float moveDuration = 1.6f;
 
+    private AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
     private void Start()
     {
         shakeTrigger = GetComponent<ShakeTrigger>();
@@ -209,6 +216,7 @@ public class FinalEnemyBehaviour : MonoBehaviour
 
     public IEnumerator Death()
     {
+        audioManager.PlaySFX(audioManager.enemyDeath);
         shakeTrigger.TriggerShake();
         StartCoroutine(StopTime(0.1f));
         _dying = true;
