@@ -1,5 +1,8 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FinalEnemyBehaviour : MonoBehaviour
 {
@@ -17,6 +20,9 @@ public class FinalEnemyBehaviour : MonoBehaviour
     [SerializeField] private bool isPatrolling;
     [SerializeField] private bool canSee;
     [SerializeField] private bool canAttack;
+    private int _facingDirection = 1;
+    private bool _isFacingRight = true;
+    private bool _dying = false;
 
     [Header("Components")]
     private Transform target;
@@ -26,10 +32,10 @@ public class FinalEnemyBehaviour : MonoBehaviour
     [SerializeField] private Animator anim;
 
     [Header("Enemy Search")]
-    protected private float moveTimer = 0f;
-    protected private float moveDuration = 1.6f;
+    private float moveTimer = 0f;
+    private float moveDuration = 1.6f;
 
-    protected virtual void Start()
+    private void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -38,7 +44,7 @@ public class FinalEnemyBehaviour : MonoBehaviour
         canAttack = true;
     }
 
-    protected virtual void Update()
+    private void Update()
     {
         UpdateAnimations();
         canSee = CanSeePlayer();
@@ -67,9 +73,10 @@ public class FinalEnemyBehaviour : MonoBehaviour
         }
 
         // Attack condition
-        if (isAgro && canSee && canAttack && distanceToPlayer < attackRange)
+        if (isAgro && canSee && canAttack && distanceToPlayer < attackRange && !_dying)
         {
             Debug.Log("I must hit");
+            
             anim.SetTrigger("EnemyAttack");
             rigidBody.linearVelocity = Vector2.zero;
             Attack();
@@ -77,7 +84,10 @@ public class FinalEnemyBehaviour : MonoBehaviour
         }
         else if (isAgro && canSee && distanceToPlayer >= attackRange)
         {
-            Move();
+            if (!_dying)
+            {
+                Move();
+            }
         }
         else
         {
@@ -87,11 +97,34 @@ public class FinalEnemyBehaviour : MonoBehaviour
         TurnDirection();
     }
 
-    protected virtual void Move()
+    private void TurnDirection()
+    {
+        float directionToTarget = target.position.x - transform.position.x;
+
+        if (_isFacingRight && directionToTarget < 0)
+        {
+            Flip();
+        }
+        else if (!_isFacingRight && directionToTarget > 0)
+        {
+            Flip();
+        }
+    }
+
+    private void Flip()
+    {
+        _facingDirection *= -1;
+        _isFacingRight = !_isFacingRight;
+
+        Vector3 scale = transform.localScale;
+        scale.x = Mathf.Abs(scale.x) * (_isFacingRight ? 1 : -1);
+        transform.localScale = scale;
+    }
+
+    private void Move()
     {
         Vector2 direction = (target.position - transform.position).normalized;
         rigidBody.linearVelocity = new Vector2(direction.x * moveSpeed, rigidBody.linearVelocity.y);
-        spriteRenderer.flipX = direction.x < 0;
     }
 
     private void PatrolOrIdle()
@@ -115,48 +148,62 @@ public class FinalEnemyBehaviour : MonoBehaviour
         anim.SetFloat("XVelocity", Mathf.Abs(rigidBody.linearVelocity.x));
     }
 
-    protected virtual void TurnDirection()
-    {
-        spriteRenderer.flipX = transform.position.x > target.position.x;
-    }
-
     /// <summary>
     /// Logic for enemy attacks.
     /// </summary>
-    protected virtual void Attack()
+    private void Attack()
     {
         if (target == null) return;
+    
+        rigidBody.linearVelocity = Vector2.zero;
 
-        Vector2 directionToPlayer = (target.position - transform.position).normalized;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, directionToPlayer, attackRange, LayerMask.GetMask("Player"));
+        // Delay the hit logic to match animation timing
+        StartCoroutine(DelayedAttack(0.4f)); // 0.4 seconds delay — adjust to match your animation
+        canAttack = false;
+    }
 
-        Debug.DrawRay(transform.position, directionToPlayer * attackRange, Color.red);
+    private IEnumerator DelayedAttack(float delay)
+    {
+        anim.SetTrigger("EnemyAttack");
+        yield return new WaitForSeconds(delay);
+        
+        float distanceToPlayer = Vector2.Distance(transform.position, target.position);
 
-        if (hit.collider != null)
+        if (target != null && distanceToPlayer <= attackRange)
         {
-            PlayerController player = hit.collider.GetComponent<PlayerController>();
-            if (player != null)
+            Vector2 directionToPlayer = (target.position - transform.position).normalized;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, directionToPlayer, attackRange, LayerMask.GetMask("Player"));
+
+            Debug.DrawRay(transform.position, directionToPlayer * attackRange, Color.red);
+
+            if (hit.collider != null)
             {
-                if (player._canGetHurt && !player.isParrying)
+                PlayerController player = hit.collider.GetComponent<PlayerController>();
+                if (player != null && !player._isDying)
                 {
-                    player.Die();
-                }
-                else if (player._canGetHurt && player.isParrying)
-                {
-                    OnParried(player.transform.position, 10f);
+                    if (player._canGetHurt && !player.isParrying)
+                    {
+                        player.Die();
+                    }
+                    else if (player._canGetHurt && player.isParrying)
+                    {
+                        OnParried(player.transform.position, 10f);
+                    }
                 }
             }
         }
     }
 
-    public void Death()
+    public IEnumerator Death()
     {
+        _dying = true;
         anim.SetTrigger("Death");
         Debug.Log("Enemy has died!");
+        yield return new WaitForSeconds(2f);
         Destroy(gameObject);
     }
 
-    protected virtual bool CanSeePlayer()
+    private bool CanSeePlayer()
     {
         Vector2 enemyPos = transform.position;
         Vector2 playerPos = target.position;
@@ -177,6 +224,14 @@ public class FinalEnemyBehaviour : MonoBehaviour
         Vector2 knockbackDirection = (transform.position - (Vector3)parrySourcePosition).normalized;
         rigidBody.linearVelocity = Vector2.zero;
         rigidBody.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Sword"))
+        {
+            StartCoroutine(Death());
+        }
     }
 
     private void OnDrawGizmosSelected()

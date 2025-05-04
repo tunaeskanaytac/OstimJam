@@ -150,11 +150,11 @@ PrefabInstance:
     - target: {fileID: 337631465717841204, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
       propertyPath: sliceEffect
       value: 
-      objectReference: {fileID: 835338971}
+      objectReference: {fileID: 0}
     - target: {fileID: 4227157909858984610, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
       propertyPath: attackObject
       value: 
-      objectReference: {fileID: 799273011}
+      objectReference: {fileID: 0}
     - target: {fileID: 5847522117934723146, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
       propertyPath: m_Size.x
       value: 0.98506975
@@ -177,7 +177,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6164502968077130032, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.32
+      value: -4.38
       objectReference: {fileID: 0}
     - target: {fileID: 6164502968077130032, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -239,8 +239,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedComponents:
+    - {fileID: 337631465717841204, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 6833773282374007946, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8959868938320873118, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
@@ -326,16 +328,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &799273011 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7521245383464584282, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
-  m_PrefabInstance: {fileID: 312481379}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &835338971 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6833773282374007946, guid: 56ac52b4a4eca4244893d9ca02dbcf7b, type: 3}
-  m_PrefabInstance: {fileID: 312481379}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &880078115
 GameObject:
   m_ObjectHideFlags: 0
@@ -1098,7 +1090,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
-  attackRange: 2
+  attackRange: 1.12
   attackSpeed: 1
   agroRange: 3
   attackCooldown: 2
@@ -1107,7 +1099,6 @@ MonoBehaviour:
   isPatrolling: 0
   canSee: 0
   canAttack: 0
-  attackObject: {fileID: 799273011}
   anim: {fileID: 1208509330}
 --- !u!1 &1210832805
 GameObject:
@@ -1439,6 +1430,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3746457398294958219, guid: b5fabfdec3dadc14a9103a8af52deefe, type: 3}
+      propertyPath: m_TagString
+      value: Sword
+      objectReference: {fileID: 0}
     - target: {fileID: 3878076178631916414, guid: b5fabfdec3dadc14a9103a8af52deefe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.25
@@ -1495,6 +1490,10 @@ PrefabInstance:
       propertyPath: timer
       value: 
       objectReference: {fileID: 309639720}
+    - target: {fileID: 8210417707272922629, guid: b5fabfdec3dadc14a9103a8af52deefe, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

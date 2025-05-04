@@ -32,7 +32,7 @@ public class AttackHitbox : MonoBehaviour
         yield return new WaitForSeconds(0.12f);
         sliceEffect.SetActive(true);
     }
-
+    /*
     private void OnTriggerStay2D(Collider2D other)
     {
         if (isParried) return;
@@ -49,7 +49,7 @@ public class AttackHitbox : MonoBehaviour
                 }
             }
         }
-        /*
+        
         if (other.CompareTag("Player"))
         {
             PlayerController player = other.GetComponent<PlayerController>();
@@ -68,6 +68,5 @@ public class AttackHitbox : MonoBehaviour
                 }
             }
         }
-        */
-    }
+    }*/
 }
