@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Player;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -274,6 +275,7 @@ public class PlayerController : MonoBehaviour
         //_rb.simulated = false;
         _canMove = false;
         //transform.localScale = new Vector3(0, 0, 0);
+        GetComponent<GameOver>().ShowGameOver();
         yield return new WaitForSeconds(duration);
         transform.position = _startPos;
         _isDying = false;
